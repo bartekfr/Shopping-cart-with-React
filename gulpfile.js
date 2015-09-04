@@ -30,8 +30,8 @@ function browserifyShare(watch){
 	b.on('update', function(changedFiles){
  		gulp.src(changedFiles)
 		.pipe(jshint())
-		.pipe(jshint.reporter('default'))
-		.pipe(jshint.reporter('fail'))
+		.pipe(jshint.reporter('default'));
+
 		bundleShare(b);
 	});
 

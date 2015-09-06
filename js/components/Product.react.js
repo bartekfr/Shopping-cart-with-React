@@ -1,26 +1,9 @@
 var React = require('react');
 var CartActions = require('../actions/CartActions');
-var ProductStore = require('../stores/ProductStore');
 var CartStore = require('../stores/CartStore');
 
-function getState() {
-	var selected = ProductStore.getSelected();
-	return {
-		selectedIndex: selected.selected,
-		updateId: selected.updateId,
-	};
-}
 
 var Product = React.createClass({
-	componentDidMount: function() {
-		ProductStore.addChangeListener(this._onChange);
-	},
-	shouldComponentUpdate: function(nextProps, nextState) {
-		if (nextState.updateId !==  this.props.id) {
-			return false;
-		}
-		return true;
-	},
 	// Add item to cart via Actions
 	addToCart: function(selected){
 		var sku = selected.sku;
@@ -32,9 +15,6 @@ var Product = React.createClass({
 		CartActions.addToCart(sku, update);
 		CartActions.updateCartVisible(true);
 	},
-	getInitialState: function() {
-		return getState();
-	},
 	// Select product variation via Actions
 	selectVariant: function(event){
 		CartActions.selectProduct({
@@ -42,14 +22,9 @@ var Product = React.createClass({
 			index: event.target.value
 		});
 	},
-	_onChange: function(data) {
-		if (data.updateId !== this.props.id) {
-			return false;
-		}
-		this.setState(getState());
-	},
 	render: function() {
-		var selected = this.props.product.variants[this.state.selectedIndex];
+		var selectedIndex = this.props.selectedIndex || 0;
+		var selected = this.props.product.variants[selectedIndex];
 
 		return (
 			/*jshint ignore:start */

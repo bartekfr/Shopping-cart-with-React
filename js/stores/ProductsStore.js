@@ -3,17 +3,24 @@ var EventEmitter = require('events').EventEmitter;
 var CartConstants = require('../constants/CartConstants');
 var _ = require('underscore');
 
-var _product = {}, _selected = null;
+var _products = [];
+var _productsSelection = {};
 
 function loadProductData(data) {
 	_products = data;
 }
 
+function setSelected(data) {
+	_productsSelection[data.product.id] = data.index;
+}
 
 // Extend ProductStore with EventEmitter to add eventing capabilities
 var ProductsStore = _.extend({}, EventEmitter.prototype, {
 	getProducts: function() {
 		return _products;
+	},
+	getSelected: function(){
+		return _productsSelection;
 	},
 	emitChange: function() {
 		this.emit('change');
@@ -30,6 +37,9 @@ AppDispatcher.register(function(payload) {
 	switch(action.actionType) {
 		case CartConstants.RECEIVE_DATA:
 			loadProductData(action.data);
+			break;
+		case CartConstants.SELECT_PRODUCT:
+			setSelected(action.data);
 			break;
 		default:
 			return true;

@@ -10,8 +10,7 @@ var jshint = require('gulp-jshint');
 gulp.task('jshint', function() {
 	return gulp.src(['./js/**/*.js'])
 		.pipe(jshint())
-		.pipe(jshint.reporter('default'))
-		.pipe(jshint.reporter('fail'));
+		.pipe(jshint.reporter('jshint-stylish'));
 });
 
 
@@ -30,7 +29,7 @@ function browserifyShare(watch){
 	b.on('update', function(changedFiles){
  		gulp.src(changedFiles)
 		.pipe(jshint())
-		.pipe(jshint.reporter('default'));
+		.pipe(jshint.reporter('jshint-stylish'));
 
 		bundleShare(b);
 	});
@@ -39,6 +38,7 @@ function browserifyShare(watch){
 }
 
 function bundleShare(b) {
+	console.log("bundling");
 	return b.bundle()
 	.on('error', gutil.log.bind(gutil, 'Browserify Error'))
 	.pipe(source('bundle.js'))

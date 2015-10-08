@@ -10,7 +10,8 @@ var Product = React.createClass({
 		var update = {
 			name: this.props.product.name,
 			type: selected.type,
-			price: selected.price
+			price: selected.price,
+			selected: selected.selected
 		};
 		CartActions.addToCart(sku, update);
 		CartActions.updateCartVisible(true);

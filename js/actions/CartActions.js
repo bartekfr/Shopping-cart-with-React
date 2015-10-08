@@ -17,6 +17,12 @@ var CartActions = {
 			data: data
 		});
 	},
+	selectCartItem: function(sku) {
+		AppDispatcher.handleAction({
+			actionType: CartConstants.CART_SELECT_ITEM,
+			sku: sku
+		});
+	},
 	// Add item to cart
 	addToCart: function(sku, update) {
 		AppDispatcher.handleAction({
@@ -30,6 +36,11 @@ var CartActions = {
 		AppDispatcher.handleAction({
 			actionType: CartConstants.CART_REMOVE,
 			sku: sku
+		});
+	},
+	removeSelected: function() {
+		AppDispatcher.handleAction({
+			actionType: CartConstants.CART_REMOVE_SELECTED
 		});
 	},
 	// Update cart visibility status

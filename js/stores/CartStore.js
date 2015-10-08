@@ -7,7 +7,7 @@ var _products = {}, _cartVisible = false;
 
 function add(sku, update) {
 	update.quantity = sku in _products ? _products[sku].quantity + 1 : 1;
-	_products[sku] = _.extend({}, _products[sku], update);
+	_products[sku] = _.extend({}, update);
 }
 
 function setCartVisible(cartVisible) {
@@ -18,6 +18,34 @@ function removeItem(sku) {
 	delete _products[sku];
 }
 
+function selectItem(sku) {
+	var selected = _products[sku].selected;
+	if (selected) {
+		_products[sku].selected = false;
+	} else {
+		_products[sku].selected = true;
+	}
+}
+
+function getSelectedItems() {
+	var selectedItems = [];
+	for (var sku in _products) {
+		var product = _products[sku];
+		var selected = product.selected;
+		if (selected) {
+			selectedItems.push(sku);
+		}
+	}
+	return selectedItems;
+}
+
+function removeSelected() {
+	var selectedItems = getSelectedItems();
+	selectedItems.forEach(function(v) {
+		removeItem(v);
+	});
+}
+
 // Extend Cart Store with EventEmitter to add eventing capabilities
 var CartStore = _.extend({}, EventEmitter.prototype, {
 	getCartItems: function() {
@@ -25,6 +53,9 @@ var CartStore = _.extend({}, EventEmitter.prototype, {
 	},
 	getCartCount: function() {
 		return Object.keys(_products).length;
+	},
+	getSelectedCount: function() {
+		return getSelectedItems().length;
 	},
 	getCartTotal: function() {
 		var total = 0;
@@ -64,7 +95,12 @@ AppDispatcher.register(function(payload) {
 		case CartConstants.CART_REMOVE:
 			removeItem(action.sku);
 			break;
-
+		case CartConstants.CART_SELECT_ITEM:
+			selectItem(action.sku);
+			break;
+		case CartConstants.CART_REMOVE_SELECTED:
+			removeSelected();
+			break;
 		default:
 			return true;
 	}

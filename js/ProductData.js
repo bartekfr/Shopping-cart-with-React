@@ -11,13 +11,12 @@ module.exports = {
 					{
 						sku: 'b-001-print',
 						type: 'print version',
-						price: 39,
-
+						price: 39
 					},
 					{
 						sku: 'b-001-pdf',
 						type: 'e-book',
-						price: 29,
+						price: 29
 					}
 				]
 			},

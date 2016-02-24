@@ -3,6 +3,7 @@ var EventEmitter = require('events').EventEmitter;
 var CartConstants = require('../constants/CartConstants');
 var _ = require('underscore');
 
+
 var _products = [];
 var _productsSelection = {};
 

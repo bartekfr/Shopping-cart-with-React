@@ -2,6 +2,7 @@ window.React = require('react');
 var ProductData = require('./ProductData');
 var CartAPI = require('./utils/CartAPI');
 var CartApp = require('./components/CartApp.react');
+var ReactDOM = require("react-dom");
 
 // Load Mock Product Data into localStorage
 ProductData.init();
@@ -9,7 +10,7 @@ ProductData.init();
 // Load Mock API Call
 CartAPI.getProductData();
 
-React.render(
+ReactDOM.render(
 	/*jshint ignore:start */
 	<CartApp />,
 	document.getElementById('cart')

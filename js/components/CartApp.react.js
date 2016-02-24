@@ -1,5 +1,5 @@
 var React = require('react');
-var Products = require('./Products.react');
+import Products from './Products.react';
 var Cart = require('./Cart.react');
 
 var CartApp = React.createClass({

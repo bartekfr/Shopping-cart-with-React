@@ -1,28 +1,36 @@
-var React = require('react');
-var CartActions = require('../actions/CartActions');
-var Product = require('./Product.react');
-var ProductsStore = require('../stores/ProductsStore');
-var CartStore = require('../stores/CartStore');
+import React, {Component} from 'react';
+import CartActions from '../actions/CartActions';
+import Product  from './Product.react';
+import ProductsStore from '../stores/ProductsStore';
+import CartStore from '../stores/CartStore';
 
 
-function getProductsState() {
-	return {
-		products: ProductsStore.getProducts(),
-		selectedProducts: ProductsStore.getSelected()
-	};
-}
+class Products extends Component {
+	constructor() {
+		super(...arguments);
+		this.state = this.getProductsState();
+		this._onChange = this._onChange.bind(this);
+	}
 
-var Products = React.createClass({
-	getInitialState: function() {
-		return getProductsState();
-	},
-	componentDidMount: function() {
+	getProductsState() {
+		return {
+			products: ProductsStore.getProducts(),
+			selectedProducts: ProductsStore.getSelected()
+		};
+	}
+	componentDidMount() {
 		ProductsStore.addChangeListener(this._onChange);
-	},
-	_onChange: function() {
-		this.setState(getProductsState());
-	},
-	render: function() {
+	}
+
+	componentWillUnmount() {
+		ProductsStore.removeChangeListener(this._onChange);
+	}
+
+	_onChange () {
+		this.setState(this.getProductsState());
+	}
+
+	render() {
 		var self = this;
 		/*jshint ignore:start */
 		var nodes = this.state.products.map(function(product){
@@ -33,6 +41,7 @@ var Products = React.createClass({
 		return (<div className="nodes">{nodes}</div>);
 		/*jshint ignore:end */
 	}
-});
+}
 
-module.exports = Products;
+
+export default Products;

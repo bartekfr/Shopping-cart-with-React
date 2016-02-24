@@ -3,7 +3,8 @@ var EventEmitter = require('events').EventEmitter;
 var CartConstants = require('../constants/CartConstants');
 var _ = require('underscore');
 
-var _products = {}, _cartVisible = false;
+let _products = {};
+let _cartVisible = false;
 
 function add(sku, update) {
 	update.quantity = sku in _products ? _products[sku].quantity + 1 : 1;

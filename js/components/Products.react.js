@@ -8,16 +8,10 @@ import CartStore from '../stores/CartStore';
 class Products extends Component {
 	constructor() {
 		super(...arguments);
-		this.state = this.getProductsState();
+		this.state = ProductsStore.getState();
 		this._onChange = this._onChange.bind(this);
 	}
 
-	getProductsState() {
-		return {
-			products: ProductsStore.getProducts(),
-			selectedProducts: ProductsStore.getSelected()
-		};
-	}
 	componentDidMount() {
 		ProductsStore.addChangeListener(this._onChange);
 	}
@@ -27,18 +21,19 @@ class Products extends Component {
 	}
 
 	_onChange () {
-		this.setState(this.getProductsState());
+		this.setState(ProductsStore.getState());
 	}
 
 	render() {
 		var self = this;
 		/*jshint ignore:start */
-		var nodes = this.state.products.map(function(product){
-			var id = product.id;
-			var selectedIndex = self.state.selectedProducts[id] || 0;
-			return <Product product={product} key={id} id={id} selectedIndex={selectedIndex} />;
-		});
-		return (<div className="nodes">{nodes}</div>);
+		return (<div className="nodes">{
+			this.state.products.map(product => {
+				var id = product.get('id');
+				var selectedIndex = self.state.selected.get(id) || 0;
+				return <Product product={product} key={id} id={id} selectedIndex={selectedIndex} />;
+			})
+		}</div>);
 		/*jshint ignore:end */
 	}
 }

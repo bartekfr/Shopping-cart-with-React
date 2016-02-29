@@ -63,9 +63,8 @@ var CartStore = _.extend({}, EventEmitter.prototype, {
 	getCartTotal: function() {
 		var total = 0;
 		_products.map(product => {
-			if(_products.hasOwnProperty(product)){
-				total += _products[product].price * _products[product].quantity;
-			}
+			total += product.get('price') * product.get('quantity');
+
 		});
 		return total.toFixed(2);
 	},

@@ -2,13 +2,15 @@ var AppDispatcher = require('../dispatcher/AppDispatcher');
 var EventEmitter = require('events').EventEmitter;
 var CartConstants = require('../constants/CartConstants');
 var _ = require('underscore');
+import { List, Map } from 'immutable';
 
-let _products = {};
+let _products = Map();
 let _cartVisible = false;
 
 function add(sku, update) {
-	update.quantity = sku in _products ? _products[sku].quantity + 1 : 1;
-	_products[sku] = _.extend({}, update);
+	update.quantity = _products.get(sku) ?_products.getIn([sku, 'quantity']) + 1 : 1;
+	var imUpdate = Map(update);
+	_products = _products.set(sku, imUpdate);
 }
 
 function setCartVisible(cartVisible) {
@@ -16,27 +18,27 @@ function setCartVisible(cartVisible) {
 }
 
 function removeItem(sku) {
-	delete _products[sku];
+	_products = _products.delete(sku);
 }
 
 function selectItem(sku) {
-	var selected = _products[sku].selected;
+	var selected = _products.getIn([sku, 'selected']);
 	if (selected) {
-		_products[sku].selected = false;
+		_products = _products.setIn([sku, 'selected'], false);
 	} else {
-		_products[sku].selected = true;
+		_products = _products.setIn([sku, 'selected'], true);
 	}
 }
 
 function getSelectedItems() {
 	var selectedItems = [];
-	for (var sku in _products) {
-		var product = _products[sku];
-		var selected = product.selected;
+	_products.map((product, sku) => {
+		var productJS = product.toJS();
+		var selected = productJS.selected;
 		if (selected) {
 			selectedItems.push(sku);
 		}
-	}
+	});
 	return selectedItems;
 }
 
@@ -53,18 +55,18 @@ var CartStore = _.extend({}, EventEmitter.prototype, {
 		return _products;
 	},
 	getCartCount: function() {
-		return Object.keys(_products).length;
+		return Object.keys(_products.toJS()).length;
 	},
 	getSelectedCount: function() {
 		return getSelectedItems().length;
 	},
 	getCartTotal: function() {
 		var total = 0;
-		for(var product in _products){
+		_products.map(product => {
 			if(_products.hasOwnProperty(product)){
 				total += _products[product].price * _products[product].quantity;
 			}
-		}
+		});
 		return total.toFixed(2);
 	},
 	getCartVisible: function() {

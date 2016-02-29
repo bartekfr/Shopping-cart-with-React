@@ -46,10 +46,16 @@
 
 	'use strict';
 
+	var _CartApp = __webpack_require__(167);
+
+	var _CartApp2 = _interopRequireDefault(_CartApp);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
 	window.React = __webpack_require__(1);
 	var ProductData = __webpack_require__(158);
 	var CartAPI = __webpack_require__(159);
-	var CartApp = __webpack_require__(167);
+
 	var ReactDOM = __webpack_require__(176);
 
 	// Load Mock Product Data into localStorage
@@ -60,7 +66,7 @@
 
 	ReactDOM.render(
 	/*jshint ignore:start */
-	React.createElement(CartApp, null), document.getElementById('cart')
+	React.createElement(_CartApp2.default, null), document.getElementById('cart')
 	/*jshint ignore:end */
 	);
 
@@ -20246,35 +20252,70 @@
 
 	'use strict';
 
+	Object.defineProperty(exports, "__esModule", {
+		value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
 	var _Products = __webpack_require__(168);
 
 	var _Products2 = _interopRequireDefault(_Products);
 
+	var _Cart = __webpack_require__(175);
+
+	var _Cart2 = _interopRequireDefault(_Cart);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	var React = __webpack_require__(1);
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-	var Cart = __webpack_require__(175);
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
 
-	var CartApp = React.createClass({
-		displayName: 'CartApp',
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-		render: function render() {
-			return(
-				/*jshint ignore:start */
-				React.createElement(
-					'div',
-					{ className: 'cart-app' },
-					React.createElement(Cart, null),
-					React.createElement(_Products2.default, null)
-				)
-				/*jshint ignore:end */
+	var CartApp = function (_Component) {
+		_inherits(CartApp, _Component);
 
-			);
+		function CartApp() {
+			_classCallCheck(this, CartApp);
+
+			return _possibleConstructorReturn(this, Object.getPrototypeOf(CartApp).apply(this, arguments));
 		}
-	});
 
-	module.exports = CartApp;
+		_createClass(CartApp, [{
+			key: 'shouldComponentUpdate',
+			value: function shouldComponentUpdate() {
+				//component have no state not props
+				return false;
+			}
+		}, {
+			key: 'render',
+			value: function render() {
+				return(
+					/*jshint ignore:start */
+					_react2.default.createElement(
+						'div',
+						{ className: 'cart-app' },
+						_react2.default.createElement(_Cart2.default, null),
+						_react2.default.createElement(_Products2.default, null)
+					)
+					/*jshint ignore:end */
+
+				);
+			}
+		}]);
+
+		return CartApp;
+	}(_react.Component);
+
+	;
+
+	exports.default = CartApp;
 
 /***/ },
 /* 168 */
@@ -20414,7 +20455,6 @@
 			// Add item to cart via Actions
 			value: function addToCart(selected) {
 				var sku = selected.sku;
-				console.log(selected.selected);
 				var update = {
 					name: this.props.product.get('name'),
 					type: selected.type,

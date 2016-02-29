@@ -1,9 +1,14 @@
-var React = require('react');
+import React, {Component} from 'react';
 import Products from './Products.react';
-var Cart = require('./Cart.react');
+import Cart from './Cart.react';
 
-var CartApp = React.createClass({
-	render: function() {
+class CartApp extends Component {
+	shouldComponentUpdate() {
+		//component have no state not props
+		return false;
+	}
+
+	render() {
 		return (
 			/*jshint ignore:start */
 			<div className="cart-app">
@@ -13,6 +18,7 @@ var CartApp = React.createClass({
 			/*jshint ignore:end */
 		);
 	}
-});
+};
 
-module.exports = CartApp;
+
+export default CartApp;

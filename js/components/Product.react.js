@@ -7,7 +7,6 @@ class Product extends Component {
 	// Add item to cart via Actions
 	addToCart(selected) {
 		var sku = selected.sku;
-		console.log(selected.selected)
 		var update = {
 			name: this.props.product.get('name'),
 			type: selected.type,

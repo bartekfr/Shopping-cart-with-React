@@ -1,7 +1,7 @@
 window.React = require('react');
 var ProductData = require('./ProductData');
 var CartAPI = require('./utils/CartAPI');
-var CartApp = require('./components/CartApp.react');
+import CartApp from './components/CartApp.react';
 var ReactDOM = require("react-dom");
 
 // Load Mock Product Data into localStorage

@@ -4,7 +4,7 @@ import Cart from './Cart.react';
 
 class CartApp extends Component {
 	shouldComponentUpdate() {
-		//component have no state not props
+		//component have no state not props so no need to re-render
 		return false;
 	}
 

@@ -2,8 +2,11 @@ import React, {Component} from 'react';
 import CartActions from '../actions/CartActions';
 import CartStore from '../stores/CartStore';
 
-
 class Product extends Component {
+	shouldComponentUpdate(nextProps) {
+		return nextProps.selectedIndex !== this.props.selectedIndex;;
+	}
+
 	// Add item to cart via Actions
 	addToCart(selected) {
 		var sku = selected.sku;

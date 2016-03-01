@@ -1,7 +1,6 @@
-var AppDispatcher = require('../dispatcher/AppDispatcher');
-var EventEmitter = require('events').EventEmitter;
-var CartConstants = require('../constants/CartConstants');
-var _ = require('underscore');
+import AppDispatcher from '../dispatcher/AppDispatcher';
+import {EventEmitter} from 'events';
+import CartConstants from '../constants/CartConstants';
 import { List, Map } from 'immutable';
 
 let _products = Map();
@@ -23,11 +22,7 @@ function removeItem(sku) {
 
 function selectItem(sku) {
 	var selected = _products.getIn([sku, 'selected']);
-	if (selected) {
-		_products = _products.setIn([sku, 'selected'], false);
-	} else {
-		_products = _products.setIn([sku, 'selected'], true);
-	}
+	_products = _products.setIn([sku, 'selected'], !selected);
 }
 
 function getSelectedItems() {
@@ -50,38 +45,47 @@ function removeSelected() {
 }
 
 // Extend Cart Store with EventEmitter to add eventing capabilities
-var CartStore = _.extend({}, EventEmitter.prototype, {
-	getCartItems: function() {
+class CartStore extends EventEmitter {
+	getCartItems() {
 		return _products;
-	},
-	getCartCount: function() {
+	}
+
+	getCartCount() {
 		return Object.keys(_products.toJS()).length;
-	},
-	getSelectedCount: function() {
+	}
+
+	getSelectedCount() {
 		return getSelectedItems().length;
-	},
-	getCartTotal: function() {
+	}
+
+	getCartTotal() {
 		var total = 0;
 		_products.map(product => {
 			total += product.get('price') * product.get('quantity');
 
 		});
 		return total.toFixed(2);
-	},
-	getCartVisible: function() {
+	}
+
+	getCartVisible() {
 		return _cartVisible;
-	},
-	emitChange: function() {
+	}
+
+	emitChange() {
 		this.emit('change');
-	},
-	addChangeListener: function(callback) {
+	}
+
+	addChangeListener(callback) {
 		this.on('change', callback);
-	},
-	removeChangeListener: function(callback) {
+	}
+
+	removeChangeListener(callback) {
 		this.removeListener('change', callback);
 	}
 
-});
+};
+
+let cartStore = new CartStore();
 
 //Register callback with AppDispatcher
 AppDispatcher.register(function(payload) {
@@ -106,11 +110,10 @@ AppDispatcher.register(function(payload) {
 		default:
 			return true;
 	}
-
-	CartStore.emitChange();
+	cartStore.emitChange();
 
 	return true;
 
 });
 
-module.exports = CartStore;
+export default cartStore;

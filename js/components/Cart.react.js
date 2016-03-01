@@ -1,6 +1,6 @@
-var React = require('react');
-var CartActions = require('../actions/CartActions');
-var CartStore = require('../stores/CartStore');
+import React, {Component} from 'react';
+import CartActions from '../actions/CartActions';
+import CartStore from '../stores/CartStore';
 import CartItem from './CartItem.react';
 
 function getCartState() {

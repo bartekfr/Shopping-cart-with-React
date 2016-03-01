@@ -9,18 +9,18 @@ class Products extends Component {
 	constructor() {
 		super(...arguments);
 		this.state = ProductsStore.getState();
-		this._onChange = this._onChange.bind(this);
+		this.onChange = this.onChange.bind(this);
 	}
 
 	componentDidMount() {
-		ProductsStore.addChangeListener(this._onChange);
+		ProductsStore.addChangeListener(this.onChange);
 	}
 
 	componentWillUnmount() {
-		ProductsStore.removeChangeListener(this._onChange);
+		ProductsStore.removeChangeListener(this.onChange);
 	}
 
-	_onChange () {
+	onChange () {
 		this.setState(ProductsStore.getState());
 	}
 

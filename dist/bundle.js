@@ -90,7 +90,7 @@
 
 	var _Products2 = _interopRequireDefault(_Products);
 
-	var _Cart = __webpack_require__(173);
+	var _Cart = __webpack_require__(172);
 
 	var _Cart2 = _interopRequireDefault(_Cart);
 
@@ -20558,8 +20558,6 @@
 		return CartStore;
 	}(_events.EventEmitter);
 
-	;
-
 	var cartStore = new CartStore();
 
 	//Register callback with AppDispatcher
@@ -25889,13 +25887,31 @@
 
 	'use strict';
 
+	Object.defineProperty(exports, "__esModule", {
+		value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _AppDispatcher = __webpack_require__(161);
+
+	var _AppDispatcher2 = _interopRequireDefault(_AppDispatcher);
+
+	var _events = __webpack_require__(169);
+
+	var _CartConstants = __webpack_require__(165);
+
+	var _CartConstants2 = _interopRequireDefault(_CartConstants);
+
 	var _immutable = __webpack_require__(170);
 
-	var AppDispatcher = __webpack_require__(161);
-	var EventEmitter = __webpack_require__(169).EventEmitter;
-	var CartConstants = __webpack_require__(165);
-	var _ = __webpack_require__(172);
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
 	var _products = (0, _immutable.List)();
 	var _productsSelection = (0, _immutable.Map)();
@@ -25908,46 +25924,278 @@
 		_productsSelection = _productsSelection.set(data.product, data.index);
 	}
 
-	// Extend ProductStore with EventEmitter to add eventing capabilities
-	var ProductsStore = _.extend({}, EventEmitter.prototype, {
-		getState: function getState() {
-			return {
-				products: _products,
-				selected: _productsSelection
-			};
-		},
-		emitChange: function emitChange() {
-			this.emit('change');
-		},
-		addChangeListener: function addChangeListener(callback, x) {
-			this.on('change', callback);
-		}
-	});
+	var ProductsStore = function (_EventEmitter) {
+		_inherits(ProductsStore, _EventEmitter);
 
-	// Register callback with AppDispatcher
-	AppDispatcher.register(function (payload) {
+		function ProductsStore() {
+			_classCallCheck(this, ProductsStore);
+
+			return _possibleConstructorReturn(this, Object.getPrototypeOf(ProductsStore).apply(this, arguments));
+		}
+
+		_createClass(ProductsStore, [{
+			key: 'getState',
+			value: function getState() {
+				return {
+					products: _products,
+					selected: _productsSelection
+				};
+			}
+		}, {
+			key: 'emitChange',
+			value: function emitChange() {
+				this.emit('change');
+			}
+		}, {
+			key: 'addChangeListener',
+			value: function addChangeListener(callback) {
+				this.on('change', callback);
+			}
+		}]);
+
+		return ProductsStore;
+	}(_events.EventEmitter);
+
+	var productsStore = new ProductsStore();
+
+	//Register callback with AppDispatcher
+	_AppDispatcher2.default.register(function (payload) {
 		var action = payload.action;
 
 		switch (action.actionType) {
-			case CartConstants.RECEIVE_DATA:
+			case _CartConstants2.default.RECEIVE_DATA:
 				loadProductData(action.data);
 				break;
-			case CartConstants.SELECT_PRODUCT:
+			case _CartConstants2.default.SELECT_PRODUCT:
 				setSelected(action.data);
 				break;
 			default:
 				return true;
 		}
 
-		ProductsStore.emitChange();
+		productsStore.emitChange();
 
 		return true;
 	});
 
-	module.exports = ProductsStore;
+	exports.default = productsStore;
 
 /***/ },
 /* 172 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	var _react = __webpack_require__(2);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _CartActions = __webpack_require__(160);
+
+	var _CartActions2 = _interopRequireDefault(_CartActions);
+
+	var _CartStore = __webpack_require__(168);
+
+	var _CartStore2 = _interopRequireDefault(_CartStore);
+
+	var _CartItem = __webpack_require__(173);
+
+	var _CartItem2 = _interopRequireDefault(_CartItem);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function getCartState() {
+		return {
+			cartItems: _CartStore2.default.getCartItems(),
+			count: _CartStore2.default.getCartCount(),
+			total: _CartStore2.default.getCartTotal(),
+			visible: _CartStore2.default.getCartVisible(),
+			selectedCount: _CartStore2.default.getSelectedCount()
+		};
+	}
+
+	var Cart = _react2.default.createClass({
+		displayName: 'Cart',
+
+		getInitialState: function getInitialState() {
+			return getCartState();
+		},
+		componentDidMount: function componentDidMount() {
+			_CartStore2.default.addChangeListener(this._onChange);
+		},
+		_onChange: function _onChange() {
+			this.setState(getCartState());
+		},
+		closeCart: function closeCart() {
+			_CartActions2.default.updateCartVisible(false);
+		},
+		// Show cart via Actions
+		openCart: function openCart() {
+			_CartActions2.default.updateCartVisible(true);
+		},
+		removeSelected: function removeSelected() {
+			_CartActions2.default.removeSelected();
+		},
+		render: function render() {
+			var self = this;
+			var products = this.state.cartItems;
+			var productsJS = products.toJS();
+			var removeLinkClass = this.state.selectedCount ? "" : "hidden";
+			var visible = this.state.visible && this.state.count;
+			return(
+				/*jshint ignore:start */
+				_react2.default.createElement(
+					'div',
+					{ className: "cart " + (visible ? 'active' : '') },
+					_react2.default.createElement(
+						'div',
+						{ className: 'mini-cart' },
+						_react2.default.createElement(
+							'button',
+							{ type: 'button', className: 'close-cart', onClick: this.closeCart },
+							'x'
+						),
+						_react2.default.createElement(
+							'ul',
+							null,
+							Object.keys(productsJS).map(function (sku, ob) {
+								return _react2.default.createElement(_CartItem2.default, { itemdata: products.get(sku), key: sku, sku: sku });
+							})
+						),
+						_react2.default.createElement(
+							'a',
+							{ href: '#', className: removeLinkClass, onClick: this.removeSelected },
+							'Delete selected items'
+						),
+						_react2.default.createElement(
+							'span',
+							{ className: 'total' },
+							'Total: $',
+							this.state.total
+						)
+					),
+					_react2.default.createElement(
+						'button',
+						{ type: 'button', className: 'view-cart', onClick: this.openCart, disabled: productsJS.length > 0 ? "" : "disabled" },
+						'View Cart (',
+						this.state.count,
+						')'
+					)
+				)
+				/*jshint ignore:end */
+
+			);
+		}
+	});
+
+	module.exports = Cart;
+
+/***/ },
+/* 173 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+		value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _react = __webpack_require__(2);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _CartActions = __webpack_require__(160);
+
+	var _CartActions2 = _interopRequireDefault(_CartActions);
+
+	var _underscore = __webpack_require__(174);
+
+	var _underscore2 = _interopRequireDefault(_underscore);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var CartItem = function (_Component) {
+		_inherits(CartItem, _Component);
+
+		function CartItem() {
+			_classCallCheck(this, CartItem);
+
+			return _possibleConstructorReturn(this, Object.getPrototypeOf(CartItem).apply(this, arguments));
+		}
+
+		_createClass(CartItem, [{
+			key: 'toggleSelection',
+			value: function toggleSelection(sku) {
+				_CartActions2.default.selectCartItem(sku);
+			}
+
+			// Remove item from Cart via Actions
+
+		}, {
+			key: 'removeFromCart',
+			value: function removeFromCart(sku) {
+				_CartActions2.default.removeFromCart(sku);
+			}
+		}, {
+			key: 'render',
+			value: function render() {
+				var product = this.props.itemdata.toJS();
+				var sku = this.props.sku;
+				var self = this;
+
+				return(
+					/*jshint ignore:start */
+					_react2.default.createElement(
+						'li',
+						null,
+						_react2.default.createElement(
+							'h1',
+							{ className: 'name' },
+							_react2.default.createElement('input', { type: 'checkbox', checked: product.selected, onChange: self.toggleSelection.bind(self, sku) }),
+							product.name
+						),
+						_react2.default.createElement(
+							'p',
+							{ className: 'type' },
+							product.type,
+							' x ',
+							product.quantity
+						),
+						_react2.default.createElement(
+							'p',
+							{ className: 'price' },
+							'$',
+							(product.price * product.quantity).toFixed(2)
+						),
+						_react2.default.createElement(
+							'button',
+							{ type: 'button', className: 'remove-item', onClick: self.removeFromCart.bind(self, sku) },
+							'Remove'
+						)
+					)
+					/*jshint ignore:end */
+
+				);
+			}
+		}]);
+
+		return CartItem;
+	}(_react.Component);
+
+	;
+
+	exports.default = CartItem;
+
+/***/ },
+/* 174 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;//     Underscore.js 1.8.3
@@ -27499,220 +27747,6 @@
 	  }
 	}.call(this));
 
-
-/***/ },
-/* 173 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	var _react = __webpack_require__(2);
-
-	var _react2 = _interopRequireDefault(_react);
-
-	var _CartActions = __webpack_require__(160);
-
-	var _CartActions2 = _interopRequireDefault(_CartActions);
-
-	var _CartStore = __webpack_require__(168);
-
-	var _CartStore2 = _interopRequireDefault(_CartStore);
-
-	var _CartItem = __webpack_require__(174);
-
-	var _CartItem2 = _interopRequireDefault(_CartItem);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	function getCartState() {
-		return {
-			cartItems: _CartStore2.default.getCartItems(),
-			count: _CartStore2.default.getCartCount(),
-			total: _CartStore2.default.getCartTotal(),
-			visible: _CartStore2.default.getCartVisible(),
-			selectedCount: _CartStore2.default.getSelectedCount()
-		};
-	}
-
-	var Cart = _react2.default.createClass({
-		displayName: 'Cart',
-
-		getInitialState: function getInitialState() {
-			return getCartState();
-		},
-		componentDidMount: function componentDidMount() {
-			_CartStore2.default.addChangeListener(this._onChange);
-		},
-		_onChange: function _onChange() {
-			this.setState(getCartState());
-		},
-		closeCart: function closeCart() {
-			_CartActions2.default.updateCartVisible(false);
-		},
-		// Show cart via Actions
-		openCart: function openCart() {
-			_CartActions2.default.updateCartVisible(true);
-		},
-		removeSelected: function removeSelected() {
-			_CartActions2.default.removeSelected();
-		},
-		render: function render() {
-			var self = this;
-			var products = this.state.cartItems;
-			var productsJS = products.toJS();
-			var removeLinkClass = this.state.selectedCount ? "" : "hidden";
-			var visible = this.state.visible && this.state.count;
-			return(
-				/*jshint ignore:start */
-				_react2.default.createElement(
-					'div',
-					{ className: "cart " + (visible ? 'active' : '') },
-					_react2.default.createElement(
-						'div',
-						{ className: 'mini-cart' },
-						_react2.default.createElement(
-							'button',
-							{ type: 'button', className: 'close-cart', onClick: this.closeCart },
-							'x'
-						),
-						_react2.default.createElement(
-							'ul',
-							null,
-							Object.keys(productsJS).map(function (sku, ob) {
-								return _react2.default.createElement(_CartItem2.default, { itemdata: products.get(sku), key: sku, sku: sku });
-							})
-						),
-						_react2.default.createElement(
-							'a',
-							{ href: '#', className: removeLinkClass, onClick: this.removeSelected },
-							'Delete selected items'
-						),
-						_react2.default.createElement(
-							'span',
-							{ className: 'total' },
-							'Total: $',
-							this.state.total
-						)
-					),
-					_react2.default.createElement(
-						'button',
-						{ type: 'button', className: 'view-cart', onClick: this.openCart, disabled: productsJS.length > 0 ? "" : "disabled" },
-						'View Cart (',
-						this.state.count,
-						')'
-					)
-				)
-				/*jshint ignore:end */
-
-			);
-		}
-	});
-
-	module.exports = Cart;
-
-/***/ },
-/* 174 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-		value: true
-	});
-
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-	var _react = __webpack_require__(2);
-
-	var _react2 = _interopRequireDefault(_react);
-
-	var _CartActions = __webpack_require__(160);
-
-	var _CartActions2 = _interopRequireDefault(_CartActions);
-
-	var _underscore = __webpack_require__(172);
-
-	var _underscore2 = _interopRequireDefault(_underscore);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-	var CartItem = function (_Component) {
-		_inherits(CartItem, _Component);
-
-		function CartItem() {
-			_classCallCheck(this, CartItem);
-
-			return _possibleConstructorReturn(this, Object.getPrototypeOf(CartItem).apply(this, arguments));
-		}
-
-		_createClass(CartItem, [{
-			key: 'toggleSelection',
-			value: function toggleSelection(sku) {
-				_CartActions2.default.selectCartItem(sku);
-			}
-
-			// Remove item from Cart via Actions
-
-		}, {
-			key: 'removeFromCart',
-			value: function removeFromCart(sku) {
-				_CartActions2.default.removeFromCart(sku);
-			}
-		}, {
-			key: 'render',
-			value: function render() {
-				var product = this.props.itemdata.toJS();
-				var sku = this.props.sku;
-				var self = this;
-
-				return(
-					/*jshint ignore:start */
-					_react2.default.createElement(
-						'li',
-						null,
-						_react2.default.createElement(
-							'h1',
-							{ className: 'name' },
-							_react2.default.createElement('input', { type: 'checkbox', checked: product.selected, onChange: self.toggleSelection.bind(self, sku) }),
-							product.name
-						),
-						_react2.default.createElement(
-							'p',
-							{ className: 'type' },
-							product.type,
-							' x ',
-							product.quantity
-						),
-						_react2.default.createElement(
-							'p',
-							{ className: 'price' },
-							'$',
-							(product.price * product.quantity).toFixed(2)
-						),
-						_react2.default.createElement(
-							'button',
-							{ type: 'button', className: 'remove-item', onClick: self.removeFromCart.bind(self, sku) },
-							'Remove'
-						)
-					)
-					/*jshint ignore:end */
-
-				);
-			}
-		}]);
-
-		return CartItem;
-	}(_react.Component);
-
-	;
-
-	exports.default = CartItem;
 
 /***/ },
 /* 175 */

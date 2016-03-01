@@ -1,7 +1,7 @@
 import AppDispatcher from '../dispatcher/AppDispatcher';
 import {EventEmitter} from 'events';
 import CartConstants from '../constants/CartConstants';
-import { List, Map } from 'immutable';
+import {List, Map} from 'immutable';
 
 let _products = Map();
 let _cartVisible = false;
@@ -83,7 +83,7 @@ class CartStore extends EventEmitter {
 		this.removeListener('change', callback);
 	}
 
-};
+}
 
 let cartStore = new CartStore();
 

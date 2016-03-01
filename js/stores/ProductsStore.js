@@ -1,8 +1,7 @@
-var AppDispatcher = require('../dispatcher/AppDispatcher');
-var EventEmitter = require('events').EventEmitter;
-var CartConstants = require('../constants/CartConstants');
-var _ = require('underscore');
-import { List, Map } from 'immutable';
+import AppDispatcher from'../dispatcher/AppDispatcher';
+import {EventEmitter} from 'events';
+import CartConstants from '../constants/CartConstants';
+import {List, Map} from 'immutable';
 
 let _products = List();
 let _productsSelection = Map();
@@ -15,23 +14,26 @@ function setSelected(data) {
 	_productsSelection = _productsSelection.set(data.product, data.index);
 }
 
-// Extend ProductStore with EventEmitter to add eventing capabilities
-var ProductsStore = _.extend({}, EventEmitter.prototype, {
-	getState: function() {
+class ProductsStore extends EventEmitter {
+	getState() {
 		return {
 			products: _products,
 			selected: _productsSelection
 		}
-	},
-	emitChange: function() {
-		this.emit('change');
-	},
-	addChangeListener: function(callback, x) {
-		this.on('change', callback);
-	},
-});
+	}
 
-// Register callback with AppDispatcher
+	emitChange() {
+		this.emit('change');
+	}
+
+	addChangeListener(callback) {
+		this.on('change', callback);
+	}
+}
+
+let productsStore = new ProductsStore();
+
+//Register callback with AppDispatcher
 AppDispatcher.register(function(payload) {
 	var action = payload.action;
 
@@ -46,10 +48,10 @@ AppDispatcher.register(function(payload) {
 			return true;
 	}
 
-	ProductsStore.emitChange();
+	productsStore.emitChange();
 
 	return true;
 
 });
 
-module.exports = ProductsStore;
+export default productsStore;

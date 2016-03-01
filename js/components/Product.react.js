@@ -1,6 +1,5 @@
 import React, {Component} from 'react';
 import CartActions from '../actions/CartActions';
-import CartStore from '../stores/CartStore';
 
 class Product extends Component {
 	shouldComponentUpdate(nextProps) {
@@ -16,12 +15,11 @@ class Product extends Component {
 			price: selected.price,
 		};
 		CartActions.addToCart(sku, update);
-		CartActions.updateCartVisible(true);
 	}
 	// Select product variation via Actions
 	selectVariant(event) {
 		CartActions.selectProduct({
-			product: this.props.id,
+			productId: this.props.id,
 			index: event.target.value
 		});
 	}
@@ -38,7 +36,7 @@ class Product extends Component {
 					<h1 className="name">{product.name}</h1>
 					<p className="description">{product.description}</p>
 					<p className="price">Price: ${selected.price}</p>
-					<select onChange={this.selectVariant.bind(this)}>
+					<select onChange={this.selectVariant.bind(this)} value={selectedIndex}>
 						{product.variants.map(function(variant, index){
 							return (
 								<option key={index} value={index}>{variant.type}</option>

@@ -1,27 +1,26 @@
 import React, {Component} from 'react';
 import CartActions from '../actions/CartActions';
 import Product  from './Product.react';
-import ProductsStore from '../stores/ProductsStore';
-import CartStore from '../stores/CartStore';
+import productsStore from '../stores/ProductsStore';
 
 
 class Products extends Component {
 	constructor() {
 		super(...arguments);
-		this.state = ProductsStore.getState();
+		this.state = productsStore.getState();
 		this.onChange = this.onChange.bind(this);
 	}
 
 	componentDidMount() {
-		ProductsStore.addChangeListener(this.onChange);
+		productsStore.addChangeListener(this.onChange);
 	}
 
 	componentWillUnmount() {
-		ProductsStore.removeChangeListener(this.onChange);
+		productsStore.removeChangeListener(this.onChange);
 	}
 
 	onChange () {
-		this.setState(ProductsStore.getState());
+		this.setState(productsStore.getState());
 	}
 
 	render() {

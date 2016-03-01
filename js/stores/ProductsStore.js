@@ -11,7 +11,7 @@ function loadProductData(data) {
 }
 
 function setSelected(data) {
-	_productsSelection = _productsSelection.set(data.product, data.index);
+	_productsSelection = _productsSelection.set(data.productId, data.index);
 }
 
 class ProductsStore extends EventEmitter {

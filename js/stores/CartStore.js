@@ -10,6 +10,7 @@ function add(sku, update) {
 	update.quantity = _products.get(sku) ?_products.getIn([sku, 'quantity']) + 1 : 1;
 	var imUpdate = Map(update);
 	_products = _products.set(sku, imUpdate);
+	_cartVisible = true;
 }
 
 function setCartVisible(cartVisible) {

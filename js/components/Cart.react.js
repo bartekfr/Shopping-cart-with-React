@@ -1,44 +1,53 @@
 import React, {Component} from 'react';
 import CartActions from '../actions/CartActions';
-import CartStore from '../stores/CartStore';
+import cartStore from '../stores/CartStore';
 import CartItem from './CartItem.react';
 
 function getCartState() {
 	return {
-		cartItems: CartStore.getCartItems(),
-		count: CartStore.getCartCount(),
-		total: CartStore.getCartTotal(),
-		visible: CartStore.getCartVisible(),
-		selectedCount: CartStore.getSelectedCount()
+		cartItems: cartStore.getCartItems(),
+		count: cartStore.getCartCount(),
+		total: cartStore.getCartTotal(),
+		visible: cartStore.getCartVisible(),
+		selectedCount: cartStore.getSelectedCount()
 	};
 }
 
-var Cart = React.createClass({
-	getInitialState: function() {
-		return getCartState();
-	},
-	componentDidMount: function() {
-		CartStore.addChangeListener(this._onChange);
-	},
-	_onChange: function() {
+class Cart extends Component {
+	constructor() {
+		super(...arguments);
+		this.state = getCartState();
+		this.onChange = this.onChange.bind(this);
+	}
+
+	componentDidMount() {
+		cartStore.addChangeListener(this.onChange);
+	}
+
+	onChange() {
 		this.setState(getCartState());
-	},
-	closeCart: function(){
+	}
+
+	closeCart(){
 		CartActions.updateCartVisible(false);
-	},
+	}
+
 	// Show cart via Actions
-	openCart: function(){
+	openCart(){
 		CartActions.updateCartVisible(true);
-	},
-	removeSelected: function() {
+	}
+
+	removeSelected() {
 		CartActions.removeSelected();
-	},
-	render: function() {
+	}
+
+	render() {
 		var self = this;
 		var products = this.state.cartItems;
 		var productsJS = products.toJS();
 		var removeLinkClass = this.state.selectedCount ? "" : "hidden";
 		var visible = this.state.visible && this.state.count;
+
 		return (
 			/*jshint ignore:start */
 			<div className={"cart " + (visible ? 'active' : '')}>
@@ -54,11 +63,11 @@ var Cart = React.createClass({
 					<a href="#" className={removeLinkClass} onClick={this.removeSelected}>Delete selected items</a>
 					<span className="total">Total: ${this.state.total}</span>
 				</div>
-				<button type="button" className="view-cart" onClick={this.openCart} disabled={productsJS.length > 0 ? "" : "disabled"}>View Cart ({this.state.count})</button>
+				<button type="button" className="view-cart" onClick={this.openCart.bind(this)} disabled={this.state.count > 0 ? false : "disabled"}>View Cart ({this.state.count})</button>
 			</div>
 			/*jshint ignore:end */
 		);
 	}
-});
+};
 
-module.exports = Cart;
+export default Cart;

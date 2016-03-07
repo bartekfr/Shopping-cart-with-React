@@ -1,8 +1,8 @@
-var AppDispatcher = require('../dispatcher/AppDispatcher');
-var CartConstants = require('../constants/CartConstants');
+import AppDispatcher from '../dispatcher/AppDispatcher';
+import CartConstants from '../constants/CartConstants';
 
 // Define actions object
-var CartActions = {
+let cartActions = {
 	// Receive inital product data
 	receiveProduct: function(data) {
 		AppDispatcher.handleAction({
@@ -52,4 +52,4 @@ var CartActions = {
 	}
 };
 
-module.exports = CartActions;
+export default cartActions;

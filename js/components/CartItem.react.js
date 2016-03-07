@@ -1,6 +1,5 @@
 import React, {Component} from 'react';
 import CartActions from '../actions/CartActions';
-import _  from '../../node_modules/underscore';
 
 class CartItem extends Component {
 	toggleSelection(sku) {

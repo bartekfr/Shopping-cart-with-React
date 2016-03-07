@@ -1,4 +1,4 @@
-module.exports = {
+export default {
 	// Load Mock Product Data Into localStorage
 	init: function() {
 		localStorage.clear();
@@ -40,5 +40,4 @@ module.exports = {
 			}
 		]));
 	}
-
-};
+}

@@ -1,6 +1,6 @@
-var CartActions = require('../actions/CartActions');
+import CartActions from '../actions/CartActions';
 
-module.exports = {
+export default{
 	getProductData: function() {
 		var data = JSON.parse(localStorage.getItem('product'));
 		CartActions.receiveProduct(data);

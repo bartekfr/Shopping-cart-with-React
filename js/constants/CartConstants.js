@@ -1,6 +1,6 @@
-var keyMirror = require('keyMirror');
+import keyMirror from 'keyMirror';
 
-module.exports = keyMirror({
+export default keyMirror({
 	CART_ADD: null,       // Adds item to cart
 	CART_REMOVE: null,    // Remove item from cart
 	CART_VISIBLE: null,   // Shows or hides the cart

@@ -49,6 +49,13 @@ let cartActions = {
 			actionType: CartConstants.CART_VISIBLE,
 			cartVisible: cartVisible
 		});
+	},
+	quanitytyChange: function(sku, quantity) {
+		AppDispatcher.handleAction({
+			actionType: CartConstants.CART_QUANTITY,
+			sku: sku,
+			quantity: quantity
+		});
 	}
 };
 

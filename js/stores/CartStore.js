@@ -3,6 +3,7 @@ import {EventEmitter} from 'events';
 import CartConstants from '../constants/CartConstants';
 import {List, Map} from 'immutable';
 
+let _cartState = Map();
 let _products = Map();
 let _cartVisible = false;
 
@@ -45,31 +46,53 @@ function removeSelected() {
 	});
 }
 
-// Extend Cart Store with EventEmitter to add eventing capabilities
+function setQuantity(sku, quantity) {
+	quantity = parseInt(quantity, 10);
+	_products = _products.setIn([sku, 'quantity'], quantity);
+}
+
+
+// store helper API
+function getCartCount() {
+	return _products.size;
+}
+
+function getSelectedCount() {
+	return getSelectedItems().length;
+}
+
+function getCartTotal() {
+	var total = 0;
+	_products.map(product => {
+		total += product.get('price') * product.get('quantity');
+
+	});
+	return total.toFixed(2);
+}
+
+function getCartVisible() {
+	return _cartVisible;
+}
+
+function getCartItems() {
+	return _products;
+}
+
 class CartStore extends EventEmitter {
-	getCartItems() {
-		return _products;
-	}
+	getState() {
 
-	getCartCount() {
-		return Object.keys(_products.toJS()).length;
-	}
-
-	getSelectedCount() {
-		return getSelectedItems().length;
-	}
-
-	getCartTotal() {
-		var total = 0;
-		_products.map(product => {
-			total += product.get('price') * product.get('quantity');
-
+		_cartState = _cartState.withMutations(_cartState => {
+			_cartState = _cartState.set('items', _products).set('visible', _cartVisible);
 		});
-		return total.toFixed(2);
-	}
 
-	getCartVisible() {
-		return _cartVisible;
+		return {
+			fullState: _cartState,
+			items: getCartItems(),
+			count: getCartCount(),
+			visible: getCartVisible(),
+			selectedCount: getSelectedCount(),
+			total: getCartTotal()
+		};
 	}
 
 	emitChange() {
@@ -107,6 +130,9 @@ AppDispatcher.register(function(payload) {
 			break;
 		case CartConstants.CART_REMOVE_SELECTED:
 			removeSelected();
+			break;
+		case CartConstants.CART_QUANTITY:
+			setQuantity(action.sku, action.quantity);
 			break;
 		default:
 			return true;

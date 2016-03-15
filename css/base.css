@@ -181,6 +181,10 @@ button.view-cart {
 	background: #a82315;
 }
 
+.quantity {
+	width: 50px;
+}
+
 @media (max-width: 1280px) {
 	button.view-cart 	{
 		position: relative;

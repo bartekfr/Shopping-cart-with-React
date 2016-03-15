@@ -19807,6 +19807,13 @@
 				actionType: _CartConstants2.default.CART_VISIBLE,
 				cartVisible: cartVisible
 			});
+		},
+		quanitytyChange: function quanitytyChange(sku, quantity) {
+			_AppDispatcher2.default.handleAction({
+				actionType: _CartConstants2.default.CART_QUANTITY,
+				sku: sku,
+				quantity: quantity
+			});
 		}
 	};
 
@@ -20168,7 +20175,8 @@
 		SET_SELECTED: null, // Selects a product option
 		RECEIVE_DATA: null, // Loads our mock data
 		CART_SELECT_ITEM: null,
-		CART_REMOVE_SELECTED: null
+		CART_REMOVE_SELECTED: null,
+		CART_QUANTITY: null
 	});
 
 /***/ },
@@ -20272,12 +20280,6 @@
 		}
 
 		_createClass(CartApp, [{
-			key: 'shouldComponentUpdate',
-			value: function shouldComponentUpdate() {
-				//component have no state not props so no need to re-render
-				return false;
-			}
-		}, {
 			key: 'render',
 			value: function render() {
 				return(
@@ -25942,16 +25944,6 @@
 
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-	function getCartState() {
-		return {
-			cartItems: _CartStore2.default.getCartItems(),
-			count: _CartStore2.default.getCartCount(),
-			total: _CartStore2.default.getCartTotal(),
-			visible: _CartStore2.default.getCartVisible(),
-			selectedCount: _CartStore2.default.getSelectedCount()
-		};
-	}
-
 	var Cart = function (_Component) {
 		_inherits(Cart, _Component);
 
@@ -25960,12 +25952,22 @@
 
 			var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Cart).apply(this, arguments));
 
-			_this.state = getCartState();
+			_this.state = _CartStore2.default.getState();
 			_this.onChange = _this.onChange.bind(_this);
 			return _this;
 		}
 
 		_createClass(Cart, [{
+			key: 'shouldComponentUpdate',
+			value: function shouldComponentUpdate(nextProps, nextState) {
+				if (nextState.fullState === this.state.fullState) {
+					console.log('no cart update');
+					return false;
+				}
+				console.log('cart update');
+				return true;
+			}
+		}, {
 			key: 'componentDidMount',
 			value: function componentDidMount() {
 				_CartStore2.default.addChangeListener(this.onChange);
@@ -25973,7 +25975,7 @@
 		}, {
 			key: 'onChange',
 			value: function onChange() {
-				this.setState(getCartState());
+				this.setState(_CartStore2.default.getState());
 			}
 		}, {
 			key: 'closeCart',
@@ -25997,7 +25999,7 @@
 			key: 'render',
 			value: function render() {
 				var self = this;
-				var products = this.state.cartItems;
+				var products = this.state.items;
 				var productsJS = products.toJS();
 				var removeLinkClass = this.state.selectedCount ? "" : "hidden";
 				var visible = this.state.visible && this.state.count;
@@ -26012,13 +26014,13 @@
 							{ className: 'mini-cart' },
 							_react2.default.createElement(
 								'button',
-								{ type: 'button', className: 'close-cart', onClick: this.closeCart },
+								{ type: 'button', className: 'close-cart', onClick: this.closeCart.bind(this) },
 								'x'
 							),
 							_react2.default.createElement(
 								'ul',
 								null,
-								Object.keys(productsJS).map(function (sku, ob) {
+								Object.keys(productsJS).map(function (sku) {
 									return _react2.default.createElement(_CartItem2.default, { itemdata: products.get(sku), key: sku, sku: sku });
 								})
 							),
@@ -26087,6 +26089,7 @@
 
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
+	var _cartState = (0, _immutable.Map)();
 	var _products = (0, _immutable.Map)();
 	var _cartVisible = false;
 
@@ -26129,7 +26132,35 @@
 		});
 	}
 
-	// Extend Cart Store with EventEmitter to add eventing capabilities
+	function setQuantity(sku, quantity) {
+		quantity = parseInt(quantity, 10);
+		_products = _products.setIn([sku, 'quantity'], quantity);
+	}
+
+	// store helper API
+	function getCartCount() {
+		return _products.size;
+	}
+
+	function getSelectedCount() {
+		return getSelectedItems().length;
+	}
+
+	function getCartTotal() {
+		var total = 0;
+		_products.map(function (product) {
+			total += product.get('price') * product.get('quantity');
+		});
+		return total.toFixed(2);
+	}
+
+	function getCartVisible() {
+		return _cartVisible;
+	}
+
+	function getCartItems() {
+		return _products;
+	}
 
 	var CartStore = function (_EventEmitter) {
 		_inherits(CartStore, _EventEmitter);
@@ -26141,33 +26172,21 @@
 		}
 
 		_createClass(CartStore, [{
-			key: 'getCartItems',
-			value: function getCartItems() {
-				return _products;
-			}
-		}, {
-			key: 'getCartCount',
-			value: function getCartCount() {
-				return Object.keys(_products.toJS()).length;
-			}
-		}, {
-			key: 'getSelectedCount',
-			value: function getSelectedCount() {
-				return getSelectedItems().length;
-			}
-		}, {
-			key: 'getCartTotal',
-			value: function getCartTotal() {
-				var total = 0;
-				_products.map(function (product) {
-					total += product.get('price') * product.get('quantity');
+			key: 'getState',
+			value: function getState() {
+
+				_cartState = _cartState.withMutations(function (_cartState) {
+					_cartState = _cartState.set('items', _products).set('visible', _cartVisible);
 				});
-				return total.toFixed(2);
-			}
-		}, {
-			key: 'getCartVisible',
-			value: function getCartVisible() {
-				return _cartVisible;
+
+				return {
+					fullState: _cartState,
+					items: getCartItems(),
+					count: getCartCount(),
+					visible: getCartVisible(),
+					selectedCount: getSelectedCount(),
+					total: getCartTotal()
+				};
 			}
 		}, {
 			key: 'emitChange',
@@ -26210,6 +26229,9 @@
 				break;
 			case _CartConstants2.default.CART_REMOVE_SELECTED:
 				removeSelected();
+				break;
+			case _CartConstants2.default.CART_QUANTITY:
+				setQuantity(action.sku, action.quantity);
 				break;
 			default:
 				return true;
@@ -26260,16 +26282,21 @@
 
 		_createClass(CartItem, [{
 			key: 'toggleSelection',
-			value: function toggleSelection(sku) {
-				_CartActions2.default.selectCartItem(sku);
+			value: function toggleSelection() {
+				_CartActions2.default.selectCartItem(this.props.sku);
 			}
 
 			// Remove item from Cart via Actions
 
 		}, {
 			key: 'removeFromCart',
-			value: function removeFromCart(sku) {
-				_CartActions2.default.removeFromCart(sku);
+			value: function removeFromCart() {
+				_CartActions2.default.removeFromCart(this.props.sku);
+			}
+		}, {
+			key: 'quantityChange',
+			value: function quantityChange(event) {
+				_CartActions2.default.quanitytyChange(this.props.sku, event.target.value);
 			}
 		}, {
 			key: 'render',
@@ -26286,15 +26313,19 @@
 						_react2.default.createElement(
 							'h1',
 							{ className: 'name' },
-							_react2.default.createElement('input', { type: 'checkbox', checked: product.selected, onChange: self.toggleSelection.bind(self, sku) }),
-							product.name
+							_react2.default.createElement(
+								'label',
+								null,
+								_react2.default.createElement('input', { type: 'checkbox', checked: product.selected, onChange: self.toggleSelection.bind(self) }),
+								product.name
+							)
 						),
 						_react2.default.createElement(
 							'p',
 							{ className: 'type' },
 							product.type,
 							' x ',
-							product.quantity
+							_react2.default.createElement('input', { className: 'quantity', type: 'text', value: product.quantity, onChange: this.quantityChange.bind(self) })
 						),
 						_react2.default.createElement(
 							'p',
@@ -26304,7 +26335,7 @@
 						),
 						_react2.default.createElement(
 							'button',
-							{ type: 'button', className: 'remove-item', onClick: self.removeFromCart.bind(self, sku) },
+							{ type: 'button', className: 'remove-item', onClick: self.removeFromCart.bind(self) },
 							'Remove'
 						)
 					)

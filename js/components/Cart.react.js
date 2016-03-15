@@ -3,21 +3,21 @@ import CartActions from '../actions/CartActions';
 import cartStore from '../stores/CartStore';
 import CartItem from './CartItem.react';
 
-function getCartState() {
-	return {
-		cartItems: cartStore.getCartItems(),
-		count: cartStore.getCartCount(),
-		total: cartStore.getCartTotal(),
-		visible: cartStore.getCartVisible(),
-		selectedCount: cartStore.getSelectedCount()
-	};
-}
 
 class Cart extends Component {
 	constructor() {
 		super(...arguments);
-		this.state = getCartState();
+		this.state = cartStore.getState();
 		this.onChange = this.onChange.bind(this);
+	}
+
+	shouldComponentUpdate(nextProps, nextState) {
+		if((nextState.fullState === this.state.fullState)) {
+			console.log('no cart update');
+			return false;
+		}
+		console.log('cart update')
+		return true;
 	}
 
 	componentDidMount() {
@@ -25,7 +25,7 @@ class Cart extends Component {
 	}
 
 	onChange() {
-		this.setState(getCartState());
+		this.setState(cartStore.getState());
 	}
 
 	closeCart(){
@@ -41,9 +41,10 @@ class Cart extends Component {
 		CartActions.removeSelected();
 	}
 
+
 	render() {
 		var self = this;
-		var products = this.state.cartItems;
+		var products = this.state.items;
 		var productsJS = products.toJS();
 		var removeLinkClass = this.state.selectedCount ? "" : "hidden";
 		var visible = this.state.visible && this.state.count;
@@ -52,9 +53,9 @@ class Cart extends Component {
 			/*jshint ignore:start */
 			<div className={"cart " + (visible ? 'active' : '')}>
 				<div className="mini-cart">
-					<button type="button" className="close-cart" onClick={this.closeCart}>x</button>
+					<button type="button" className="close-cart" onClick={this.closeCart.bind(this)}>x</button>
 					<ul>
-						{Object.keys(productsJS).map(function(sku, ob){
+						{Object.keys(productsJS).map(sku => {
 							return (
 								<CartItem itemdata={products.get(sku)} key={sku} sku={sku} />
 							)

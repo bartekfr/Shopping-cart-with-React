@@ -80,9 +80,8 @@ function getCartItems() {
 
 class CartStore extends EventEmitter {
 	getState() {
-
-		_cartState = _cartState.withMutations(_cartState => {
-			_cartState = _cartState.set('items', _products).set('visible', _cartVisible);
+		_cartState = _cartState.withMutations(state => {
+			state.set('items', _products).set('visible', _cartVisible);
 		});
 
 		return {

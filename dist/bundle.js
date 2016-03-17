@@ -26174,9 +26174,8 @@
 		_createClass(CartStore, [{
 			key: 'getState',
 			value: function getState() {
-
-				_cartState = _cartState.withMutations(function (_cartState) {
-					_cartState = _cartState.set('items', _products).set('visible', _cartVisible);
+				_cartState = _cartState.withMutations(function (state) {
+					state.set('items', _products).set('visible', _cartVisible);
 				});
 
 				return {

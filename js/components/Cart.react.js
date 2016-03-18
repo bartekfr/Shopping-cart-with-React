@@ -12,6 +12,7 @@ class Cart extends Component {
 	}
 
 	shouldComponentUpdate(nextProps, nextState) {
+		//todo: remove console and refactor to one line
 		if((nextState.fullState === this.state.fullState)) {
 			console.log('no cart update');
 			return false;

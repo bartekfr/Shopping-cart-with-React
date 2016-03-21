@@ -1,9 +1,13 @@
 import React, {Component} from 'react';
 import CartActions from '../actions/CartActions';
+import shallowCompare from 'react-addons-shallow-compare';
 
 class Product extends Component {
-	shouldComponentUpdate(nextProps) {
-		return nextProps.selectedIndex !== this.props.selectedIndex;;
+	shouldComponentUpdate(nextProps, nextState) {
+		var shouldUpdate = shallowCompare(this, nextProps, nextState);
+		//todo: remove and refactor to one line
+		console.log('product', shouldUpdate);
+		return shouldUpdate;
 	}
 
 	// Add item to cart via Actions

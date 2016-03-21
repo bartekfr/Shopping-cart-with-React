@@ -62,7 +62,7 @@
 
 	var _CartApp2 = _interopRequireDefault(_CartApp);
 
-	var _reactDom = __webpack_require__(176);
+	var _reactDom = __webpack_require__(178);
 
 	var _reactDom2 = _interopRequireDefault(_reactDom);
 
@@ -20410,6 +20410,10 @@
 
 	var _CartActions2 = _interopRequireDefault(_CartActions);
 
+	var _reactAddonsShallowCompare = __webpack_require__(176);
+
+	var _reactAddonsShallowCompare2 = _interopRequireDefault(_reactAddonsShallowCompare);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -20429,8 +20433,11 @@
 
 		_createClass(Product, [{
 			key: 'shouldComponentUpdate',
-			value: function shouldComponentUpdate(nextProps) {
-				return nextProps.selectedIndex !== this.props.selectedIndex;;
+			value: function shouldComponentUpdate(nextProps, nextState) {
+				var shouldUpdate = (0, _reactAddonsShallowCompare2.default)(this, nextProps, nextState);
+				//todo: remove and refactor to one line
+				console.log('product', shouldUpdate);
+				return shouldUpdate;
 			}
 
 			// Add item to cart via Actions
@@ -25936,6 +25943,10 @@
 
 	var _CartItem2 = _interopRequireDefault(_CartItem);
 
+	var _reactAddonsShallowCompare = __webpack_require__(176);
+
+	var _reactAddonsShallowCompare2 = _interopRequireDefault(_reactAddonsShallowCompare);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -25960,13 +25971,10 @@
 		_createClass(Cart, [{
 			key: 'shouldComponentUpdate',
 			value: function shouldComponentUpdate(nextProps, nextState) {
-				//todo: remove console and refactor to one line
-				if (nextState.fullState === this.state.fullState) {
-					console.log('no cart update');
-					return false;
-				}
-				console.log('cart update');
-				return true;
+				var shouldUpdate = (0, _reactAddonsShallowCompare2.default)(this, nextProps, nextState);
+				//todo: remove and refactor to one line
+				console.log('cart', shouldUpdate);
+				return shouldUpdate;
 			}
 		}, {
 			key: 'componentDidMount',
@@ -25983,9 +25991,6 @@
 			value: function closeCart() {
 				_CartActions2.default.updateCartVisible(false);
 			}
-
-			// Show cart via Actions
-
 		}, {
 			key: 'openCart',
 			value: function openCart() {
@@ -26354,6 +26359,41 @@
 
 /***/ },
 /* 176 */
+/***/ function(module, exports, __webpack_require__) {
+
+	module.exports = __webpack_require__(177);
+
+/***/ },
+/* 177 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/**
+	 * Copyright 2013-2015, Facebook, Inc.
+	 * All rights reserved.
+	 *
+	 * This source code is licensed under the BSD-style license found in the
+	 * LICENSE file in the root directory of this source tree. An additional grant
+	 * of patent rights can be found in the PATENTS file in the same directory.
+	 *
+	* @providesModule shallowCompare
+	*/
+
+	'use strict';
+
+	var shallowEqual = __webpack_require__(117);
+
+	/**
+	 * Does a shallow comparison for props and state.
+	 * See ReactComponentWithPureRenderMixin
+	 */
+	function shallowCompare(instance, nextProps, nextState) {
+	  return !shallowEqual(instance.props, nextProps) || !shallowEqual(instance.state, nextState);
+	}
+
+	module.exports = shallowCompare;
+
+/***/ },
+/* 178 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';

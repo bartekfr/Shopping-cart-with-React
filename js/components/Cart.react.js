@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import CartActions from '../actions/CartActions';
 import cartStore from '../stores/CartStore';
 import CartItem from './CartItem.react';
-
+import shallowCompare from 'react-addons-shallow-compare';
 
 class Cart extends Component {
 	constructor() {
@@ -12,13 +12,10 @@ class Cart extends Component {
 	}
 
 	shouldComponentUpdate(nextProps, nextState) {
-		//todo: remove console and refactor to one line
-		if((nextState.fullState === this.state.fullState)) {
-			console.log('no cart update');
-			return false;
-		}
-		console.log('cart update')
-		return true;
+		var shouldUpdate = shallowCompare(this, nextProps, nextState);
+		//todo: remove and refactor to one line
+		console.log('cart', shouldUpdate);
+		return shouldUpdate;
 	}
 
 	componentDidMount() {
@@ -33,7 +30,6 @@ class Cart extends Component {
 		CartActions.updateCartVisible(false);
 	}
 
-	// Show cart via Actions
 	openCart(){
 		CartActions.updateCartVisible(true);
 	}
@@ -41,7 +37,6 @@ class Cart extends Component {
 	removeSelected() {
 		CartActions.removeSelected();
 	}
-
 
 	render() {
 		var self = this;

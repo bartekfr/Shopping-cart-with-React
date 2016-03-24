@@ -12,6 +12,7 @@ class Products extends Component {
 	}
 
 	componentDidMount() {
+		CartActions.loadProductData();
 		productsStore.addChangeListener(this.onChange);
 	}
 

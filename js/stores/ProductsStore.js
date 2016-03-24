@@ -38,7 +38,7 @@ AppDispatcher.register(function(payload) {
 	var action = payload.action;
 
 	switch(action.actionType) {
-		case CartConstants.RECEIVE_DATA:
+		case CartConstants.LOAD_DATA_SUCCESS:
 			loadProductData(action.data);
 			break;
 		case CartConstants.SELECT_PRODUCT:

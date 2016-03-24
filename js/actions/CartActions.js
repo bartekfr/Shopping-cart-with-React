@@ -1,12 +1,20 @@
 import AppDispatcher from '../dispatcher/AppDispatcher';
 import CartConstants from '../constants/CartConstants';
+import cartAPI from '../cartAPI';
+
 
 // Define actions object
 let cartActions = {
 	// Receive inital product data
-	receiveProduct: function(data) {
+	loadProductData: function() {
+		cartAPI.fetch();
 		AppDispatcher.handleAction({
-			actionType: CartConstants.RECEIVE_DATA,
+			actionType: CartConstants.LOAD_DATA
+		});
+	},
+	loadProductDataSuccess: function(data) {
+		AppDispatcher.handleAction({
+			actionType: CartConstants.LOAD_DATA_SUCCESS,
 			data: data
 		});
 	},

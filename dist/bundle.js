@@ -50,10 +50,6 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _ProductData = __webpack_require__(158);
-
-	var _ProductData2 = _interopRequireDefault(_ProductData);
-
 	var _CartAPI = __webpack_require__(159);
 
 	var _CartAPI2 = _interopRequireDefault(_CartAPI);
@@ -67,12 +63,6 @@
 	var _reactDom2 = _interopRequireDefault(_reactDom);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	// Load Mock Product Data into localStorage
-	_ProductData2.default.init();
-
-	// Load Mock API Call
-	_CartAPI2.default.getProductData();
 
 	_reactDom2.default.render(
 	/*jshint ignore:start */
@@ -19673,50 +19663,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4)))
 
 /***/ },
-/* 158 */
-/***/ function(module, exports) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-		value: true
-	});
-	exports.default = {
-		// Load Mock Product Data Into localStorage
-		init: function init() {
-			localStorage.clear();
-			localStorage.setItem('product', JSON.stringify([{
-				id: 'b-001',
-				name: 'ReactJS book',
-				description: 'First reactJS book',
-				variants: [{
-					sku: 'b-001-print',
-					type: 'print version',
-					price: 39
-				}, {
-					sku: 'b-001-pdf',
-					type: 'e-book',
-					price: 29
-				}]
-			}, {
-				id: 'b-002',
-				name: 'CSS book',
-				description: 'css bookk',
-				variants: [{
-					sku: 'b-002-print',
-					type: 'print version',
-					price: 19
-
-				}, {
-					sku: 'b-002-pdf',
-					type: 'e-book',
-					price: 9
-				}]
-			}]));
-		}
-	};
-
-/***/ },
+/* 158 */,
 /* 159 */
 /***/ function(module, exports, __webpack_require__) {
 
@@ -19757,14 +19704,24 @@
 
 	var _CartConstants2 = _interopRequireDefault(_CartConstants);
 
+	var _cartAPI = __webpack_require__(180);
+
+	var _cartAPI2 = _interopRequireDefault(_cartAPI);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	// Define actions object
 	var cartActions = {
 		// Receive inital product data
-		receiveProduct: function receiveProduct(data) {
+		loadProductData: function loadProductData() {
+			_cartAPI2.default.fetch();
 			_AppDispatcher2.default.handleAction({
-				actionType: _CartConstants2.default.RECEIVE_DATA,
+				actionType: _CartConstants2.default.LOAD_DATA
+			});
+		},
+		loadProductDataSuccess: function loadProductDataSuccess(data) {
+			_AppDispatcher2.default.handleAction({
+				actionType: _CartConstants2.default.LOAD_DATA_SUCCESS,
 				data: data
 			});
 		},
@@ -20169,11 +20126,12 @@
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	exports.default = (0, _keyMirror2.default)({
-		CART_ADD: null, // Adds item to cart
-		CART_REMOVE: null, // Remove item from cart
-		CART_VISIBLE: null, // Shows or hides the cart
-		SET_SELECTED: null, // Selects a product option
-		RECEIVE_DATA: null, // Loads our mock data
+		CART_ADD: null,
+		CART_REMOVE: null,
+		CART_VISIBLE: null,
+		SET_SELECTED: null,
+		LOAD_DATA: null,
+		LOAD_DATA_SUCCESS: null,
 		CART_SELECT_ITEM: null,
 		CART_REMOVE_SELECTED: null,
 		CART_QUANTITY: null
@@ -20258,7 +20216,7 @@
 
 	var _Products2 = _interopRequireDefault(_Products);
 
-	var _Cart = __webpack_require__(173);
+	var _Cart = __webpack_require__(175);
 
 	var _Cart2 = _interopRequireDefault(_Cart);
 
@@ -20327,7 +20285,7 @@
 
 	var _Product2 = _interopRequireDefault(_Product);
 
-	var _ProductsStore = __webpack_require__(170);
+	var _ProductsStore = __webpack_require__(172);
 
 	var _ProductsStore2 = _interopRequireDefault(_ProductsStore);
 
@@ -20355,6 +20313,7 @@
 		_createClass(Products, [{
 			key: 'componentDidMount',
 			value: function componentDidMount() {
+				_CartActions2.default.loadProductData();
 				_ProductsStore2.default.addChangeListener(this.onChange);
 			}
 		}, {
@@ -20410,7 +20369,7 @@
 
 	var _CartActions2 = _interopRequireDefault(_CartActions);
 
-	var _reactAddonsShallowCompare = __webpack_require__(176);
+	var _reactAddonsShallowCompare = __webpack_require__(170);
 
 	var _reactAddonsShallowCompare2 = _interopRequireDefault(_reactAddonsShallowCompare);
 
@@ -20529,6 +20488,41 @@
 /* 170 */
 /***/ function(module, exports, __webpack_require__) {
 
+	module.exports = __webpack_require__(171);
+
+/***/ },
+/* 171 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/**
+	 * Copyright 2013-2015, Facebook, Inc.
+	 * All rights reserved.
+	 *
+	 * This source code is licensed under the BSD-style license found in the
+	 * LICENSE file in the root directory of this source tree. An additional grant
+	 * of patent rights can be found in the PATENTS file in the same directory.
+	 *
+	* @providesModule shallowCompare
+	*/
+
+	'use strict';
+
+	var shallowEqual = __webpack_require__(117);
+
+	/**
+	 * Does a shallow comparison for props and state.
+	 * See ReactComponentWithPureRenderMixin
+	 */
+	function shallowCompare(instance, nextProps, nextState) {
+	  return !shallowEqual(instance.props, nextProps) || !shallowEqual(instance.state, nextState);
+	}
+
+	module.exports = shallowCompare;
+
+/***/ },
+/* 172 */
+/***/ function(module, exports, __webpack_require__) {
+
 	'use strict';
 
 	Object.defineProperty(exports, "__esModule", {
@@ -20541,13 +20535,13 @@
 
 	var _AppDispatcher2 = _interopRequireDefault(_AppDispatcher);
 
-	var _events = __webpack_require__(171);
+	var _events = __webpack_require__(173);
 
 	var _CartConstants = __webpack_require__(165);
 
 	var _CartConstants2 = _interopRequireDefault(_CartConstants);
 
-	var _immutable = __webpack_require__(172);
+	var _immutable = __webpack_require__(174);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -20607,7 +20601,7 @@
 		var action = payload.action;
 
 		switch (action.actionType) {
-			case _CartConstants2.default.RECEIVE_DATA:
+			case _CartConstants2.default.LOAD_DATA_SUCCESS:
 				loadProductData(action.data);
 				break;
 			case _CartConstants2.default.SELECT_PRODUCT:
@@ -20625,7 +20619,7 @@
 	exports.default = productsStore;
 
 /***/ },
-/* 171 */
+/* 173 */
 /***/ function(module, exports) {
 
 	// Copyright Joyent, Inc. and other Node contributors.
@@ -20929,7 +20923,7 @@
 
 
 /***/ },
-/* 172 */
+/* 174 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -25916,7 +25910,7 @@
 	}));
 
 /***/ },
-/* 173 */
+/* 175 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -25935,15 +25929,15 @@
 
 	var _CartActions2 = _interopRequireDefault(_CartActions);
 
-	var _CartStore = __webpack_require__(174);
+	var _CartStore = __webpack_require__(176);
 
 	var _CartStore2 = _interopRequireDefault(_CartStore);
 
-	var _CartItem = __webpack_require__(175);
+	var _CartItem = __webpack_require__(177);
 
 	var _CartItem2 = _interopRequireDefault(_CartItem);
 
-	var _reactAddonsShallowCompare = __webpack_require__(176);
+	var _reactAddonsShallowCompare = __webpack_require__(170);
 
 	var _reactAddonsShallowCompare2 = _interopRequireDefault(_reactAddonsShallowCompare);
 
@@ -26064,7 +26058,7 @@
 	exports.default = Cart;
 
 /***/ },
-/* 174 */
+/* 176 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -26079,13 +26073,13 @@
 
 	var _AppDispatcher2 = _interopRequireDefault(_AppDispatcher);
 
-	var _events = __webpack_require__(171);
+	var _events = __webpack_require__(173);
 
 	var _CartConstants = __webpack_require__(165);
 
 	var _CartConstants2 = _interopRequireDefault(_CartConstants);
 
-	var _immutable = __webpack_require__(172);
+	var _immutable = __webpack_require__(174);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -26249,7 +26243,7 @@
 	exports.default = cartStore;
 
 /***/ },
-/* 175 */
+/* 177 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -26358,41 +26352,6 @@
 	exports.default = CartItem;
 
 /***/ },
-/* 176 */
-/***/ function(module, exports, __webpack_require__) {
-
-	module.exports = __webpack_require__(177);
-
-/***/ },
-/* 177 */
-/***/ function(module, exports, __webpack_require__) {
-
-	/**
-	 * Copyright 2013-2015, Facebook, Inc.
-	 * All rights reserved.
-	 *
-	 * This source code is licensed under the BSD-style license found in the
-	 * LICENSE file in the root directory of this source tree. An additional grant
-	 * of patent rights can be found in the PATENTS file in the same directory.
-	 *
-	* @providesModule shallowCompare
-	*/
-
-	'use strict';
-
-	var shallowEqual = __webpack_require__(117);
-
-	/**
-	 * Does a shallow comparison for props and state.
-	 * See ReactComponentWithPureRenderMixin
-	 */
-	function shallowCompare(instance, nextProps, nextState) {
-	  return !shallowEqual(instance.props, nextProps) || !shallowEqual(instance.state, nextState);
-	}
-
-	module.exports = shallowCompare;
-
-/***/ },
 /* 178 */
 /***/ function(module, exports, __webpack_require__) {
 
@@ -26400,6 +26359,69 @@
 
 	module.exports = __webpack_require__(3);
 
+
+/***/ },
+/* 179 */,
+/* 180 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+		value: true
+	});
+
+	var _CartActions = __webpack_require__(160);
+
+	var _CartActions2 = _interopRequireDefault(_CartActions);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	var data = [{
+		"id": "b-001",
+		"name": "ReactJS book",
+		"description": "First reactJS book",
+		"variants": [{
+			"sku": "b-001-print",
+			"type": "print version",
+			"price": 39
+		}, {
+			"sku": "b-001-pdf",
+			"type": "e-book",
+			"price": 29
+		}]
+	}, {
+		"id": "b-002",
+		"name": "CSS book",
+		"description": "css bookk",
+		"variants": [{
+			"sku": "b-002-print",
+			"type": "print version",
+			"price": 19
+
+		}, {
+			"sku": "b-002-pdf",
+			"type": "e-book",
+			"price": 9
+		}]
+	}];
+
+	var cartAPI = {
+		fetch: function fetch() {
+			//emulate async request with Promise API
+			var promise = new Promise(function (resolve, reject) {
+				setTimeout(function () {
+					resolve(data);
+				}, 500);
+			});
+
+			promise.then(function (response) {
+				_CartActions2.default.loadProductDataSuccess(response);
+			});
+		}
+	};
+
+	exports.default = cartAPI;
 
 /***/ }
 /******/ ]);

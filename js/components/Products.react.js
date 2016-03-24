@@ -2,13 +2,20 @@ import React, {Component} from 'react';
 import CartActions from '../actions/CartActions';
 import Product  from './Product.react';
 import productsStore from '../stores/ProductsStore';
-
+import shallowCompare from 'react-addons-shallow-compare';
 
 class Products extends Component {
 	constructor() {
 		super(...arguments);
 		this.state = productsStore.getState();
 		this.onChange = this.onChange.bind(this);
+	}
+
+	shouldComponentUpdate(nextProps, nextState) {
+		var shouldUpdate = shallowCompare(this, nextProps, nextState);
+		//todo: remove and refactor to one line
+		console.log('products', shouldUpdate);
+		return shouldUpdate;
 	}
 
 	componentDidMount() {

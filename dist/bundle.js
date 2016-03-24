@@ -20289,6 +20289,10 @@
 
 	var _ProductsStore2 = _interopRequireDefault(_ProductsStore);
 
+	var _reactAddonsShallowCompare = __webpack_require__(170);
+
+	var _reactAddonsShallowCompare2 = _interopRequireDefault(_reactAddonsShallowCompare);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -20311,6 +20315,14 @@
 		}
 
 		_createClass(Products, [{
+			key: 'shouldComponentUpdate',
+			value: function shouldComponentUpdate(nextProps, nextState) {
+				var shouldUpdate = (0, _reactAddonsShallowCompare2.default)(this, nextProps, nextState);
+				//todo: remove and refactor to one line
+				console.log('products', shouldUpdate);
+				return shouldUpdate;
+			}
+		}, {
 			key: 'componentDidMount',
 			value: function componentDidMount() {
 				_CartActions2.default.loadProductData();
@@ -26262,6 +26274,10 @@
 
 	var _CartActions2 = _interopRequireDefault(_CartActions);
 
+	var _reactAddonsShallowCompare = __webpack_require__(170);
+
+	var _reactAddonsShallowCompare2 = _interopRequireDefault(_reactAddonsShallowCompare);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -26280,6 +26296,14 @@
 		}
 
 		_createClass(CartItem, [{
+			key: 'shouldComponentUpdate',
+			value: function shouldComponentUpdate(nextProps, nextState) {
+				var shouldUpdate = (0, _reactAddonsShallowCompare2.default)(this, nextProps, nextState);
+				//todo: remove and refactor to one line
+				console.log('cart item', shouldUpdate);
+				return shouldUpdate;
+			}
+		}, {
 			key: 'toggleSelection',
 			value: function toggleSelection() {
 				_CartActions2.default.selectCartItem(this.props.sku);

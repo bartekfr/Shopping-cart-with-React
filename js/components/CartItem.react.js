@@ -1,7 +1,15 @@
 import React, {Component} from 'react';
 import CartActions from '../actions/CartActions';
+import shallowCompare from 'react-addons-shallow-compare';
 
 class CartItem extends Component {
+	shouldComponentUpdate(nextProps, nextState) {
+		var shouldUpdate = shallowCompare(this, nextProps, nextState);
+		//todo: remove and refactor to one line
+		console.log('cart item', shouldUpdate);
+		return shouldUpdate;
+	}
+
 	toggleSelection() {
 		CartActions.selectCartItem(this.props.sku);
 	}

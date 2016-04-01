@@ -85,7 +85,6 @@ p {
 .product img,
 .product-detail {
 	display: inline-block;
-
 	vertical-align: top;
 }
 
@@ -98,7 +97,6 @@ button.view-cart {
 	position: absolute;
 	top: 20px;
 	right: 20px;
-
 	width: auto;
 	max-width: 600px;
 	margin: 0 auto;

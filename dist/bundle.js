@@ -50,11 +50,7 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _CartAPI = __webpack_require__(159);
-
-	var _CartAPI2 = _interopRequireDefault(_CartAPI);
-
-	var _CartApp = __webpack_require__(167);
+	var _CartApp = __webpack_require__(158);
 
 	var _CartApp2 = _interopRequireDefault(_CartApp);
 
@@ -19663,7 +19659,76 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4)))
 
 /***/ },
-/* 158 */,
+/* 158 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+		value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _Products = __webpack_require__(159);
+
+	var _Products2 = _interopRequireDefault(_Products);
+
+	var _NewProduct = __webpack_require__(174);
+
+	var _NewProduct2 = _interopRequireDefault(_NewProduct);
+
+	var _Cart = __webpack_require__(175);
+
+	var _Cart2 = _interopRequireDefault(_Cart);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var CartApp = function (_Component) {
+		_inherits(CartApp, _Component);
+
+		function CartApp() {
+			_classCallCheck(this, CartApp);
+
+			return _possibleConstructorReturn(this, Object.getPrototypeOf(CartApp).apply(this, arguments));
+		}
+
+		_createClass(CartApp, [{
+			key: 'render',
+			value: function render() {
+				return(
+					/*jshint ignore:start */
+					_react2.default.createElement(
+						'div',
+						{ className: 'cart-app' },
+						_react2.default.createElement(_Cart2.default, null),
+						_react2.default.createElement(_Products2.default, null),
+						_react2.default.createElement(_NewProduct2.default, null)
+					)
+					/*jshint ignore:end */
+
+				);
+			}
+		}]);
+
+		return CartApp;
+	}(_react.Component);
+
+	;
+
+	exports.default = CartApp;
+
+/***/ },
 /* 159 */
 /***/ function(module, exports, __webpack_require__) {
 
@@ -19673,18 +19738,95 @@
 		value: true
 	});
 
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
 	var _CartActions = __webpack_require__(160);
 
 	var _CartActions2 = _interopRequireDefault(_CartActions);
 
+	var _Product = __webpack_require__(168);
+
+	var _Product2 = _interopRequireDefault(_Product);
+
+	var _ProductsStore = __webpack_require__(171);
+
+	var _ProductsStore2 = _interopRequireDefault(_ProductsStore);
+
+	var _reactAddonsShallowCompare = __webpack_require__(169);
+
+	var _reactAddonsShallowCompare2 = _interopRequireDefault(_reactAddonsShallowCompare);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	exports.default = {
-		getProductData: function getProductData() {
-			var data = JSON.parse(localStorage.getItem('product'));
-			_CartActions2.default.receiveProduct(data);
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var Products = function (_Component) {
+		_inherits(Products, _Component);
+
+		function Products() {
+			_classCallCheck(this, Products);
+
+			var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Products).apply(this, arguments));
+
+			_this.state = _ProductsStore2.default.getState();
+			_this.onChange = _this.onChange.bind(_this);
+			return _this;
 		}
-	};
+
+		_createClass(Products, [{
+			key: 'shouldComponentUpdate',
+			value: function shouldComponentUpdate(nextProps, nextState) {
+				var shouldUpdate = (0, _reactAddonsShallowCompare2.default)(this, nextProps, nextState);
+				//todo: remove and refactor to one line
+				console.log('products', shouldUpdate);
+				return shouldUpdate;
+			}
+		}, {
+			key: 'componentDidMount',
+			value: function componentDidMount() {
+				_CartActions2.default.loadProductData();
+				_ProductsStore2.default.addChangeListener(this.onChange);
+			}
+		}, {
+			key: 'componentWillUnmount',
+			value: function componentWillUnmount() {
+				_ProductsStore2.default.removeChangeListener(this.onChange);
+			}
+		}, {
+			key: 'onChange',
+			value: function onChange() {
+				this.setState(_ProductsStore2.default.getState());
+			}
+		}, {
+			key: 'render',
+			value: function render() {
+				var self = this;
+				/*jshint ignore:start */
+				return _react2.default.createElement(
+					'div',
+					{ className: 'nodes' },
+					this.state.products.map(function (product) {
+						var id = product.get('id');
+						var selectedIndex = self.state.selected.get(id) || 0;
+						return _react2.default.createElement(_Product2.default, { product: product, key: id, id: id, selectedIndex: selectedIndex });
+					})
+				);
+				/*jshint ignore:end */
+			}
+		}]);
+
+		return Products;
+	}(_react.Component);
+
+	exports.default = Products;
 
 /***/ },
 /* 160 */
@@ -19704,7 +19846,7 @@
 
 	var _CartConstants2 = _interopRequireDefault(_CartConstants);
 
-	var _cartAPI = __webpack_require__(180);
+	var _cartAPI = __webpack_require__(167);
 
 	var _cartAPI2 = _interopRequireDefault(_cartAPI);
 
@@ -19722,6 +19864,18 @@
 		loadProductDataSuccess: function loadProductDataSuccess(data) {
 			_AppDispatcher2.default.handleAction({
 				actionType: _CartConstants2.default.LOAD_DATA_SUCCESS,
+				data: data
+			});
+		},
+		addNewProduct: function addNewProduct(data) {
+			_cartAPI2.default.addNewProduct(data);
+			_AppDispatcher2.default.handleAction({
+				actionType: _CartConstants2.default.ADD_NEW_PRODUCT
+			});
+		},
+		addNewProductSuccess: function addNewProductSuccess(data) {
+			_AppDispatcher2.default.handleAction({
+				actionType: _CartConstants2.default.ADD_NEW_PRODUCT_SUCCESS,
 				data: data
 			});
 		},
@@ -20130,8 +20284,11 @@
 		CART_REMOVE: null,
 		CART_VISIBLE: null,
 		SET_SELECTED: null,
+		ADD_NEW_PRODUCT: null,
 		LOAD_DATA: null,
 		LOAD_DATA_SUCCESS: null,
+		ADD_NEW_PRODUCT: null,
+		ADD_NEW_PRODUCT_SUCCESS: null,
 		CART_SELECT_ITEM: null,
 		CART_REMOVE_SELECTED: null,
 		CART_QUANTITY: null
@@ -20200,66 +20357,91 @@
 /* 167 */
 /***/ function(module, exports, __webpack_require__) {
 
-	'use strict';
+	"use strict";
 
 	Object.defineProperty(exports, "__esModule", {
 		value: true
 	});
 
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	var _CartActions = __webpack_require__(160);
 
-	var _react = __webpack_require__(1);
-
-	var _react2 = _interopRequireDefault(_react);
-
-	var _Products = __webpack_require__(168);
-
-	var _Products2 = _interopRequireDefault(_Products);
-
-	var _Cart = __webpack_require__(175);
-
-	var _Cart2 = _interopRequireDefault(_Cart);
+	var _CartActions2 = _interopRequireDefault(_CartActions);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	var productsData = [{
+		"id": "b-1",
+		"name": "ReactJS book",
+		"description": "First reactJS book",
+		"variants": [{
+			"sku": "b-1-print",
+			"type": "print version",
+			"price": 39
+		}, {
+			"sku": "b-1-ebook",
+			"type": "e-book",
+			"price": 29
+		}]
+	}, {
+		"id": "b-2",
+		"name": "CSS book",
+		"description": "css bookk",
+		"variants": [{
+			"sku": "b-2-print",
+			"type": "print version",
+			"price": 19
 
-	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+		}, {
+			"sku": "b-2-ebook",
+			"type": "e-book",
+			"price": 9
+		}]
+	}];
 
-	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	if (localStorage.getItem('products') === null) {
+		localStorage.setItem('products', JSON.stringify(productsData));
+	} else {
+		productsData = JSON.parse(localStorage.getItem('products'));
+	}
 
-	var CartApp = function (_Component) {
-		_inherits(CartApp, _Component);
+	var cartAPI = {
+		fetch: function fetch() {
+			//fake async request with Promise API
+			var promise = new Promise(function (resolve, reject) {
+				setTimeout(function () {
+					resolve(productsData);
+				}, 200);
+			});
 
-		function CartApp() {
-			_classCallCheck(this, CartApp);
+			promise.then(function (response) {
+				_CartActions2.default.loadProductDataSuccess(response);
+			});
+		},
+		addNewProduct: function addNewProduct(data) {
+			//fake backend id generation
+			var lastIdNumber = productsData[productsData.length - 1].id.split('-')[1];
+			var newIdNumber = ++lastIdNumber;
+			var id = 'b-' + newIdNumber;
 
-			return _possibleConstructorReturn(this, Object.getPrototypeOf(CartApp).apply(this, arguments));
+			data.id = id;
+			data.variants[0].sku = id + '-print';
+			data.variants[1].sku = id + '-ebook';
+
+			var promise = new Promise(function (resolve, reject) {
+				setTimeout(function () {
+					productsData.push(data);
+					localStorage.setItem('products', JSON.stringify(productsData));
+					resolve(data);
+				}, 200);
+			});
+
+			promise.then(function (response) {
+				_CartActions2.default.addNewProductSuccess(response);
+			});
 		}
+	};
 
-		_createClass(CartApp, [{
-			key: 'render',
-			value: function render() {
-				return(
-					/*jshint ignore:start */
-					_react2.default.createElement(
-						'div',
-						{ className: 'cart-app' },
-						_react2.default.createElement(_Cart2.default, null),
-						_react2.default.createElement(_Products2.default, null)
-					)
-					/*jshint ignore:end */
-
-				);
-			}
-		}]);
-
-		return CartApp;
-	}(_react.Component);
-
-	;
-
-	exports.default = CartApp;
+	exports.default = cartAPI;
 
 /***/ },
 /* 168 */
@@ -20281,107 +20463,7 @@
 
 	var _CartActions2 = _interopRequireDefault(_CartActions);
 
-	var _Product = __webpack_require__(169);
-
-	var _Product2 = _interopRequireDefault(_Product);
-
-	var _ProductsStore = __webpack_require__(172);
-
-	var _ProductsStore2 = _interopRequireDefault(_ProductsStore);
-
-	var _reactAddonsShallowCompare = __webpack_require__(170);
-
-	var _reactAddonsShallowCompare2 = _interopRequireDefault(_reactAddonsShallowCompare);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-	var Products = function (_Component) {
-		_inherits(Products, _Component);
-
-		function Products() {
-			_classCallCheck(this, Products);
-
-			var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Products).apply(this, arguments));
-
-			_this.state = _ProductsStore2.default.getState();
-			_this.onChange = _this.onChange.bind(_this);
-			return _this;
-		}
-
-		_createClass(Products, [{
-			key: 'shouldComponentUpdate',
-			value: function shouldComponentUpdate(nextProps, nextState) {
-				var shouldUpdate = (0, _reactAddonsShallowCompare2.default)(this, nextProps, nextState);
-				//todo: remove and refactor to one line
-				console.log('products', shouldUpdate);
-				return shouldUpdate;
-			}
-		}, {
-			key: 'componentDidMount',
-			value: function componentDidMount() {
-				_CartActions2.default.loadProductData();
-				_ProductsStore2.default.addChangeListener(this.onChange);
-			}
-		}, {
-			key: 'componentWillUnmount',
-			value: function componentWillUnmount() {
-				_ProductsStore2.default.removeChangeListener(this.onChange);
-			}
-		}, {
-			key: 'onChange',
-			value: function onChange() {
-				this.setState(_ProductsStore2.default.getState());
-			}
-		}, {
-			key: 'render',
-			value: function render() {
-				var self = this;
-				/*jshint ignore:start */
-				return _react2.default.createElement(
-					'div',
-					{ className: 'nodes' },
-					this.state.products.map(function (product) {
-						var id = product.get('id');
-						var selectedIndex = self.state.selected.get(id) || 0;
-						return _react2.default.createElement(_Product2.default, { product: product, key: id, id: id, selectedIndex: selectedIndex });
-					})
-				);
-				/*jshint ignore:end */
-			}
-		}]);
-
-		return Products;
-	}(_react.Component);
-
-	exports.default = Products;
-
-/***/ },
-/* 169 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-		value: true
-	});
-
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-	var _react = __webpack_require__(1);
-
-	var _react2 = _interopRequireDefault(_react);
-
-	var _CartActions = __webpack_require__(160);
-
-	var _CartActions2 = _interopRequireDefault(_CartActions);
-
-	var _reactAddonsShallowCompare = __webpack_require__(170);
+	var _reactAddonsShallowCompare = __webpack_require__(169);
 
 	var _reactAddonsShallowCompare2 = _interopRequireDefault(_reactAddonsShallowCompare);
 
@@ -20497,13 +20579,13 @@
 	exports.default = Product;
 
 /***/ },
-/* 170 */
+/* 169 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__(171);
+	module.exports = __webpack_require__(170);
 
 /***/ },
-/* 171 */
+/* 170 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -20532,7 +20614,7 @@
 	module.exports = shallowCompare;
 
 /***/ },
-/* 172 */
+/* 171 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -20547,13 +20629,13 @@
 
 	var _AppDispatcher2 = _interopRequireDefault(_AppDispatcher);
 
-	var _events = __webpack_require__(173);
+	var _events = __webpack_require__(172);
 
 	var _CartConstants = __webpack_require__(165);
 
 	var _CartConstants2 = _interopRequireDefault(_CartConstants);
 
-	var _immutable = __webpack_require__(174);
+	var _immutable = __webpack_require__(173);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -20572,6 +20654,10 @@
 
 	function setSelected(data) {
 		_productsSelection = _productsSelection.set(data.productId, data.index);
+	}
+
+	function addNewProduct(data) {
+		_products = _products.push((0, _immutable.Map)(data));
 	}
 
 	var ProductsStore = function (_EventEmitter) {
@@ -20619,6 +20705,9 @@
 			case _CartConstants2.default.SELECT_PRODUCT:
 				setSelected(action.data);
 				break;
+			case _CartConstants2.default.ADD_NEW_PRODUCT_SUCCESS:
+				addNewProduct(action.data);
+				break;
 			default:
 				return true;
 		}
@@ -20631,7 +20720,7 @@
 	exports.default = productsStore;
 
 /***/ },
-/* 173 */
+/* 172 */
 /***/ function(module, exports) {
 
 	// Copyright Joyent, Inc. and other Node contributors.
@@ -20935,7 +21024,7 @@
 
 
 /***/ },
-/* 174 */
+/* 173 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -25922,6 +26011,135 @@
 	}));
 
 /***/ },
+/* 174 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+		value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _CartActions = __webpack_require__(160);
+
+	var _CartActions2 = _interopRequireDefault(_CartActions);
+
+	var _ProductsStore = __webpack_require__(171);
+
+	var _ProductsStore2 = _interopRequireDefault(_ProductsStore);
+
+	var _reactAddonsShallowCompare = __webpack_require__(169);
+
+	var _reactAddonsShallowCompare2 = _interopRequireDefault(_reactAddonsShallowCompare);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var NewProduct = function (_Component) {
+		_inherits(NewProduct, _Component);
+
+		function NewProduct() {
+			_classCallCheck(this, NewProduct);
+
+			return _possibleConstructorReturn(this, Object.getPrototypeOf(NewProduct).apply(this, arguments));
+		}
+
+		_createClass(NewProduct, [{
+			key: 'shouldComponentUpdate',
+			value: function shouldComponentUpdate(nextProps, nextState) {
+				var shouldUpdate = (0, _reactAddonsShallowCompare2.default)(this, nextProps, nextState);
+				//todo: remove and refactor to one line
+				console.log('new product', shouldUpdate);
+				return shouldUpdate;
+			}
+		}, {
+			key: 'addProduct',
+			value: function addProduct() {
+				var name = this.refs.name.value;
+				var description = this.refs.description.value;
+				var printPrice = this.refs.printPrice.value;
+				var ePrice = this.refs.ePrice.value;
+
+				_CartActions2.default.addNewProduct({
+					"name": name,
+					"description": description,
+					"variants": [{
+						"type": "print version",
+						"price": printPrice
+					}, {
+						"type": "e-book",
+						"price": ePrice
+					}]
+				});
+
+				this.refs.name.value = '';
+				this.refs.description.value = '';
+				this.refs.printPrice.value = '';
+				this.refs.ePrice.value = '';
+			}
+		}, {
+			key: 'render',
+			value: function render() {
+				return(
+					/*jshint ignore:start */
+					_react2.default.createElement(
+						'div',
+						{ className: 'product' },
+						_react2.default.createElement(
+							'div',
+							{ className: 'product-detail test' },
+							_react2.default.createElement(
+								'p',
+								null,
+								_react2.default.createElement('input', { placeholder: 'Name', type: 'text', ref: 'name' })
+							),
+							_react2.default.createElement(
+								'p',
+								null,
+								_react2.default.createElement('input', { placeholder: 'Description', type: 'text', ref: 'description' })
+							),
+							_react2.default.createElement(
+								'p',
+								null,
+								_react2.default.createElement('input', { placeholder: 'Print price', type: 'text', ref: 'printPrice' })
+							),
+							_react2.default.createElement(
+								'p',
+								null,
+								_react2.default.createElement('input', { placeholder: 'E-book price', type: 'text', ref: 'ePrice' })
+							),
+							_react2.default.createElement(
+								'button',
+								{ type: 'button', onClick: this.addProduct.bind(this) },
+								'Add new product'
+							)
+						)
+					)
+					/*jshint ignore:end */
+
+				);
+			}
+		}]);
+
+		return NewProduct;
+	}(_react.Component);
+
+	;
+
+	exports.default = NewProduct;
+
+/***/ },
 /* 175 */
 /***/ function(module, exports, __webpack_require__) {
 
@@ -25949,7 +26167,7 @@
 
 	var _CartItem2 = _interopRequireDefault(_CartItem);
 
-	var _reactAddonsShallowCompare = __webpack_require__(170);
+	var _reactAddonsShallowCompare = __webpack_require__(169);
 
 	var _reactAddonsShallowCompare2 = _interopRequireDefault(_reactAddonsShallowCompare);
 
@@ -26085,13 +26303,13 @@
 
 	var _AppDispatcher2 = _interopRequireDefault(_AppDispatcher);
 
-	var _events = __webpack_require__(173);
+	var _events = __webpack_require__(172);
 
 	var _CartConstants = __webpack_require__(165);
 
 	var _CartConstants2 = _interopRequireDefault(_CartConstants);
 
-	var _immutable = __webpack_require__(174);
+	var _immutable = __webpack_require__(173);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -26274,7 +26492,7 @@
 
 	var _CartActions2 = _interopRequireDefault(_CartActions);
 
-	var _reactAddonsShallowCompare = __webpack_require__(170);
+	var _reactAddonsShallowCompare = __webpack_require__(169);
 
 	var _reactAddonsShallowCompare2 = _interopRequireDefault(_reactAddonsShallowCompare);
 
@@ -26383,69 +26601,6 @@
 
 	module.exports = __webpack_require__(3);
 
-
-/***/ },
-/* 179 */,
-/* 180 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-
-	Object.defineProperty(exports, "__esModule", {
-		value: true
-	});
-
-	var _CartActions = __webpack_require__(160);
-
-	var _CartActions2 = _interopRequireDefault(_CartActions);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	var data = [{
-		"id": "b-001",
-		"name": "ReactJS book",
-		"description": "First reactJS book",
-		"variants": [{
-			"sku": "b-001-print",
-			"type": "print version",
-			"price": 39
-		}, {
-			"sku": "b-001-pdf",
-			"type": "e-book",
-			"price": 29
-		}]
-	}, {
-		"id": "b-002",
-		"name": "CSS book",
-		"description": "css bookk",
-		"variants": [{
-			"sku": "b-002-print",
-			"type": "print version",
-			"price": 19
-
-		}, {
-			"sku": "b-002-pdf",
-			"type": "e-book",
-			"price": 9
-		}]
-	}];
-
-	var cartAPI = {
-		fetch: function fetch() {
-			//emulate async request with Promise API
-			var promise = new Promise(function (resolve, reject) {
-				setTimeout(function () {
-					resolve(data);
-				}, 500);
-			});
-
-			promise.then(function (response) {
-				_CartActions2.default.loadProductDataSuccess(response);
-			});
-		}
-	};
-
-	exports.default = cartAPI;
 
 /***/ }
 /******/ ]);

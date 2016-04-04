@@ -18,6 +18,18 @@ let cartActions = {
 			data: data
 		});
 	},
+	addNewProduct: function(data) {
+		cartAPI.addNewProduct(data);
+		AppDispatcher.handleAction({
+			actionType: CartConstants.ADD_NEW_PRODUCT
+		});
+	},
+	addNewProductSuccess: function(data) {
+		AppDispatcher.handleAction({
+			actionType: CartConstants.ADD_NEW_PRODUCT_SUCCESS,
+			data: data
+		});
+	},
 	// Set currently selected product variation
 	selectProduct: function(data) {
 		AppDispatcher.handleAction({

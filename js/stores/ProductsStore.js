@@ -14,6 +14,10 @@ function setSelected(data) {
 	_productsSelection = _productsSelection.set(data.productId, data.index);
 }
 
+function addNewProduct(data) {
+	_products = _products.push(Map(data));
+}
+
 class ProductsStore extends EventEmitter {
 	getState() {
 		return {
@@ -43,6 +47,9 @@ AppDispatcher.register(function(payload) {
 			break;
 		case CartConstants.SELECT_PRODUCT:
 			setSelected(action.data);
+			break;
+		case CartConstants.ADD_NEW_PRODUCT_SUCCESS:
+			addNewProduct(action.data);
 			break;
 		default:
 			return true;

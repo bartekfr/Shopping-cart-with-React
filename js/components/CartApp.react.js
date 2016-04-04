@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import Products from './Products.react';
+import NewProduct from './NewProduct.react';
 import Cart from './Cart.react';
 
 class CartApp extends Component {
@@ -9,6 +10,7 @@ class CartApp extends Component {
 			<div className="cart-app">
 				<Cart />
 				<Products />
+				<NewProduct />
 			</div>
 			/*jshint ignore:end */
 		);
